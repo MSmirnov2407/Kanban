@@ -4,13 +4,13 @@ public class Task {
     protected Integer id; //уникальный номер
     protected String name; //название задачи
     protected String description; //описание
-    protected String status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
+    protected Status status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
 
     public Task(String name, String description, Integer id) {
         this.name = name;
         this.description = description;
         this.id = id;
-        this.status = "NEW";
+        this.status = Status.NEW;
     }
 
     public Task(String name, String description) {
@@ -41,11 +41,11 @@ public class Task {
         this.description = description;
     }
 
-    public String getStatus() {
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

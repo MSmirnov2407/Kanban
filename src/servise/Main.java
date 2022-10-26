@@ -1,6 +1,6 @@
 package servise;
 
-import model.*; //пакет с классами таск, сабтаск, эпик
+import model.*; //пакет с классами таск, сабтаск, эпик, enum Status
 
 public class Main {
     public static void main(String[] args) {
@@ -20,29 +20,29 @@ public class Main {
         /*посмотрим на состояние объектов через печать*/
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
-        System.out.println("subtaks: " + manager.getSubtasks());
+        System.out.println("subtask: " + manager.getSubtasks());
         /*изменим статусы задач*/
-        manager.getTaskById(1).setStatus("IN_PROGRESS");
+        manager.getTaskById(1).setStatus(Status.IN_PROGRESS);
         manager.updateTask(manager.getTaskById(1));
-        manager.getTaskById(2).setStatus("DONE");
+        manager.getTaskById(2).setStatus(Status.DONE);
         manager.updateTask(manager.getTaskById(2));
         /*изменим статусы подзадач*/
-        manager.getSubtaskById(2).setStatus("DONE");
+        manager.getSubtaskById(2).setStatus(Status.DONE);
         manager.updateSubtask(manager.getSubtaskById(2));
-        manager.getSubtaskById(3).setStatus("IN_PROGRESS");
+        manager.getSubtaskById(3).setStatus(Status.IN_PROGRESS);
         manager.updateSubtask(manager.getSubtaskById(3));
         /*посмотрим на состояние объектов через печать*/
-        System.out.println("");
+        System.out.println();
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
-        System.out.println("subtaks: " + manager.getSubtasks());
+        System.out.println("subtask: " + manager.getSubtasks());
         /*удалим один таск и один эпик*/
         manager.deleteTaskById(2);
         manager.deleteEpicById(1);
         /*посмотрим на состояние объектов через печать*/
-        System.out.println("");
+        System.out.println();
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
-        System.out.println("subtaks: " + manager.getSubtasks());
+        System.out.println("subtask: " + manager.getSubtasks());
     }
 }

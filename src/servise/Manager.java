@@ -1,6 +1,7 @@
 package servise;
 
 import model.Epic;
+import model.Status;
 import model.Subtask;
 import model.Task;
 
@@ -179,30 +180,30 @@ public class Manager {
             return;
         }
         if (epic.getSubtaskIds().isEmpty()) { //если подзадач нет, то статус эпика NEW
-            epic.setStatus("NEW");
+            epic.setStatus(Status.NEW);
         } else { //иначе
             int subtaskAmount = 0; //объявляем переменную для хранения общего кол-ва подзадач эпика
             for (Integer s : epic.getSubtaskIds()) { //цикл по всем id подзадач данного эпика. посчитаем кол-во подзадач
                 Subtask subtask = subtasks.get(s); //берем из хешмапы подзадачу с нужным id
                 subtaskAmount += 1; //подсчитываем количество подхадач
                 switch (subtask.getStatus()) { //в зависимости от статуса подзадачи, увеличиваем нужный счетчик
-                    case "NEW":
+                    case NEW:
                         newAmount += 1; //увеличиваем счетчик новых задач
                         break;
-                    case "IN_PROGRESS":
+                    case IN_PROGRESS:
                         inProgressAmount += 1; //увеличиваем счетчик выполняемых задач
                         break;
-                    case "DONE":
+                    case DONE:
                         doneAmount += 1; //увеличиваем счетчик выполненных задач
                         break;
                 }//switch
             } //for
             if (doneAmount == subtaskAmount) { //если все подзадачи завершены
-                epic.setStatus("DONE");
+                epic.setStatus(Status.DONE);
             } else if (newAmount == subtaskAmount) { //если все подзадачи новые
-                epic.setStatus("NEW");
+                epic.setStatus(Status.NEW);
             } else { //если не все задачи завершены и не все задачи новые, то статус "в процессе"
-                epic.setStatus("IN_PROGRESS");
+                epic.setStatus(Status.IN_PROGRESS);
             }
         } //if (epic.getSubtasks().isEmpty())
     } //обновляем статус эпика
