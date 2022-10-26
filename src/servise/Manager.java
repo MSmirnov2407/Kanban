@@ -17,6 +17,9 @@ public class Manager {
     private Integer subtaskId; //id подзадач
     private Integer epicId; //id эпиков
 
+    /**
+     * конструктор менеджера
+     */
     public Manager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
@@ -24,61 +27,110 @@ public class Manager {
         taskId = 0;
         subtaskId = 0;
         epicId = 0;
-    } //конструктор менеджера
+    }
 
+    /**
+     * Возвращаем содержимое мапы tasks в виде списка всех задач
+     *
+     * @return ArrayList<Task>
+     */
     public ArrayList<Task> getTasks() {
         var taskList = new ArrayList<Task>();
-        for (Task task: tasks.values()){
+        for (Task task : tasks.values()) {
             taskList.add(task);
         }
         return taskList;
-    } //возвращаем список всех задач
+    }
 
+    /**
+     * Возвращаем содержимое мапы subtasks в виде списка всех подзадач
+     *
+     * @return ArrayList<Subtask>
+     */
     public ArrayList<Subtask> getSubtasks() {
         var subtaskList = new ArrayList<Subtask>();
-        for (Subtask subtask: subtasks.values()){
+        for (Subtask subtask : subtasks.values()) {
             subtaskList.add(subtask);
         }
         return subtaskList;
-    } //возвращаем список всех подзадач
+    }
 
+    /**
+     * Возвращаем содержимое мапы epics в виде списка всех эпиков
+     *
+     * @return ArrayList<Epic>
+     */
     public ArrayList<Epic> getEpics() {
+
         var epicList = new ArrayList<Epic>();
-        for (Epic epic: epics.values()){
+        for (Epic epic : epics.values()) {
             epicList.add(epic);
         }
         return epicList;
-    } //возвращаем список всех эпиков
+    }
 
+    /**
+     * Удаление всех задач
+     */
     public void deleteAllTasks() {
         tasks.clear();
-    } //удаление всех задач
+    }
 
+    /**
+     * удаление всех подзадач
+     */
     public void deleteAllSubtasks() {
         for (Epic epic : epics.values()) { //для каждого эпика в общем списке эпиков
             epic.getSubtaskIds().clear(); //очищаем список подзадач
             updateEpicStatus(epic.getId()); //обновляем статус эпика (он станет NEW)
         }
         subtasks.clear();
-    } //удаление всех подзадач
+    }
 
+    /**
+     * удаление всех эпиков
+     */
     public void deleteAllEpics() {
         epics.clear();
         subtasks.clear(); //сабтаски не существуют без эпиков
-    } //удаление всех эпиков
+    }
 
+    /**
+     * получение таска по id
+     *
+     * @param id
+     * @return Task
+     */
     public Task getTaskById(Integer id) {
         return tasks.get(id);
-    } //получение таска по id
+    }
 
+    /**
+     * получение сабтаска по id
+     *
+     * @param id
+     * @return Subtask
+     */
     public Subtask getSubtaskById(Integer id) {
         return subtasks.get(id);
-    } //получение сабтаска по id
+    }
 
+    /**
+     * получение эпика по id
+     *
+     * @param id
+     * @return Epic
+     */
     public Epic getEpicById(Integer id) {
         return epics.get(id);
-    } //получение эпика по id
+    }
 
+    /**
+     * создание нового таска
+     *
+     * @param newTask
+     * @return Integer id
+     */
     public Integer createTask(Task newTask) {
         if (newTask != null) {
             taskId += 1; //инкрементируем id тасков
@@ -89,8 +141,14 @@ public class Manager {
             System.out.println("Ошибка создания задачи: получена ссылка со значением null");
             return null;
         }
-    } //создаем новый таск
+    }
 
+    /**
+     * создание нового сабтаска
+     *
+     * @param newSubtask
+     * @return Integer id
+     */
     public Integer createSubtask(Subtask newSubtask) {
         if ((newSubtask != null) && (newSubtask.getEpicId() != null)) {
             subtaskId += 1; //инкрементируем id сабтасков
@@ -102,8 +160,14 @@ public class Manager {
             System.out.println("Ошибка создания подзадачи: получена ссылка со значением null");
             return null;
         }
-    } //создаем новый сабтаск
+    }
 
+    /**
+     * создание нового эпика
+     *
+     * @param newEpic
+     * @return Integer id
+     */
     public Integer createEpic(Epic newEpic) {
         if (newEpic != null) {
             epicId += 1; //инкрементируем id эпиков
@@ -114,16 +178,26 @@ public class Manager {
             System.out.println("Ошибка создания эпика: получена ссылка со значением null");
             return null;
         }
-    } //создаем новый эпик
+    }
 
+    /**
+     * обновление тасков
+     *
+     * @param freshTask
+     */
     public void updateTask(Task freshTask) {
         if ((freshTask != null) && (tasks.containsKey(freshTask.getId()))) {
             tasks.put(freshTask.getId(), freshTask); //добавляем обновленную задачу в список, заменяя прежнюю
         } else {
             System.out.println("Невозможно обновить задачу!");
         }
-    } //обновление тасков
+    }
 
+    /**
+     * обновление сабтасков
+     *
+     * @param freshSubtask
+     */
     public void updateSubtask(Subtask freshSubtask) {
         if ((freshSubtask != null) && (subtasks.containsKey(freshSubtask.getId()))
                 && (freshSubtask.getEpicId() != null)) {
@@ -132,25 +206,40 @@ public class Manager {
         } else {
             System.out.println("Невозможно обновить подзадачу!");
         }
-    } //обновление сабтасков
+    }
 
+    /**
+     * обновление эпиков
+     *
+     * @param freshEpic
+     */
     public void updateEpic(Epic freshEpic) {
         if ((freshEpic != null) && (epics.containsKey(freshEpic.getId()))) {
             epics.put(freshEpic.getId(), freshEpic); //добавляем обновленную задачу в список, заменяя прежний
         } else {
             System.out.println("Невозможно обновить эпик'!");
         }
-    } //обновление эпиков
+    }
 
+    /**
+     * удаление одного таска по id
+     *
+     * @param id
+     */
     public void deleteTaskById(Integer id) {
         tasks.remove(id);
-    } //удаление одного таска
+    }
 
+    /**
+     * Удаление одного сабтаска по id
+     *
+     * @param id
+     */
     public void deleteSubtaskById(Integer id) {
         if (subtasks.containsKey(id)) {
             if (getSubtaskById(id).getEpicId() != null) {
-                Epic e = epics.get(getSubtaskById(id).getEpicId()); //из общего списка эпиков берем тот,
-                                                                    // на кот.ссылается сабтаск
+                /*из общего списка эпиков берем тот,на кот.ссылается сабтаск*/
+                Epic e = epics.get(getSubtaskById(id).getEpicId());
                 e.deleteSubtask(id); // в найденном эпике удаляем подзадачу
                 updateEpicStatus(e.getId()); //обновляем статус эпика после удаления подзадачи
             }
@@ -158,8 +247,13 @@ public class Manager {
         } else {
             System.out.println("Ошибка удаления подзадачи: несуществующий ID");
         }
-    } //Удаление одного сабтаска
+    }
 
+    /**
+     * Удаление одного эпика по id
+     *
+     * @param id
+     */
     public void deleteEpicById(Integer id) {
         if (tasks.containsKey(id)) {
             for (Integer i : epics.get(id).getSubtaskIds()) { //пробегаем по списку id подзадач эпика
@@ -167,8 +261,13 @@ public class Manager {
             }
             epics.remove(id); //после этого удаляем сам эпик.
         }
-    } //Удаление одного эпика
+    }
 
+    /**
+     * обновление статуса эпика в зависимости от статусов подзадач
+     *
+     * @param epicId
+     */
     private void updateEpicStatus(Integer epicId) {
         Epic epic = epics.get(epicId); //по переданному id достаем из хешмапы нужный эпик
         int newAmount = 0; //количество подзадач со статусом NEW
@@ -206,5 +305,5 @@ public class Manager {
                 epic.setStatus(Status.IN_PROGRESS);
             }
         } //if (epic.getSubtasks().isEmpty())
-    } //обновляем статус эпика
+    }
 }

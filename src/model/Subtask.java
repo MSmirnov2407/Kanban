@@ -4,7 +4,7 @@ public class Subtask extends Task {
     private Integer epicId; //эпик которому принадлежит подзадача
 
     public Subtask(String name, String description) {
-        this(name, description,null, null);
+        this(name, description, null, null);
     } //конструктор
 
     public Subtask(String name, String description, Integer epicId) {
@@ -15,6 +15,7 @@ public class Subtask extends Task {
         super(name, description, id);
         this.epicId = epicId;
     } //конструктор
+
     public void setEpicId(Integer epicId) {
         this.epicId = epicId;
     }
