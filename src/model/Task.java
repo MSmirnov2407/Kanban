@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class Task {
     protected Integer id; //уникальный номер
@@ -6,11 +6,15 @@ public class Task {
     protected String description; //описание
     protected String status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
 
-    public Task(String name, String description) {
-        this.id = 0;
+    public Task(String name, String description, Integer id) {
         this.name = name;
         this.description = description;
+        this.id = id;
         this.status = "NEW";
+    }
+
+    public Task(String name, String description) {
+        this(name, description, null);
     }
 
     public Integer getId() {
@@ -47,6 +51,6 @@ public class Task {
 
     @Override
     public String toString() {
-        return ("name= " + this.name + ", status= " + this.status);
+        return ("id= "+this.id + ", name= " + this.name + ", status= " + this.status);
     }
 }
