@@ -5,6 +5,7 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
+import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
@@ -13,9 +14,9 @@ public class Manager {
     private Map<Integer, Task> tasks;   //список задач
     private Map<Integer, Subtask> subtasks; //список подзадач
     private Map<Integer, Epic> epics; //список эпиков
-    private Integer taskId; //id задач
-    private Integer subtaskId; //id подзадач
-    private Integer epicId; //id эпиков
+    private int taskId; //id задач, инициализируется по умолчанию 0
+    private int subtaskId; //id подзадач, инициализируется по умолчанию 0
+    private int epicId; //id эпиков, инициализируется по умолчанию 0
 
     /**
      * конструктор менеджера
@@ -24,49 +25,33 @@ public class Manager {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
-        taskId = 0;
-        subtaskId = 0;
-        epicId = 0;
     }
 
     /**
      * Возвращаем содержимое мапы tasks в виде списка всех задач
      *
-     * @return ArrayList<Task>
+     * @return список Тасков
      */
     public ArrayList<Task> getTasks() {
-        var taskList = new ArrayList<Task>();
-        for (Task task : tasks.values()) {
-            taskList.add(task);
-        }
-        return taskList;
+        return new ArrayList<>(tasks.values());
     }
 
     /**
      * Возвращаем содержимое мапы subtasks в виде списка всех подзадач
      *
-     * @return ArrayList<Subtask>
+     * @return Список Сабтасков
      */
     public ArrayList<Subtask> getSubtasks() {
-        var subtaskList = new ArrayList<Subtask>();
-        for (Subtask subtask : subtasks.values()) {
-            subtaskList.add(subtask);
-        }
-        return subtaskList;
+        return new ArrayList<>(subtasks.values());
     }
 
     /**
      * Возвращаем содержимое мапы epics в виде списка всех эпиков
      *
-     * @return ArrayList<Epic>
+     * @return Список эпиков
      */
     public ArrayList<Epic> getEpics() {
-
-        var epicList = new ArrayList<Epic>();
-        for (Epic epic : epics.values()) {
-            epicList.add(epic);
-        }
-        return epicList;
+        return new ArrayList<>(epics.values());
     }
 
     /**
@@ -98,8 +83,8 @@ public class Manager {
     /**
      * получение таска по id
      *
-     * @param id
-     * @return Task
+     * @param id запрашиваемого таска
+     * @return запрашиваемый таск
      */
     public Task getTaskById(Integer id) {
         return tasks.get(id);
@@ -108,8 +93,8 @@ public class Manager {
     /**
      * получение сабтаска по id
      *
-     * @param id
-     * @return Subtask
+     * @param id запрашиваемого сабтаска
+     * @return запрашиваемый сабтаск
      */
     public Subtask getSubtaskById(Integer id) {
         return subtasks.get(id);
@@ -118,8 +103,8 @@ public class Manager {
     /**
      * получение эпика по id
      *
-     * @param id
-     * @return Epic
+     * @param id запрашиваемого эпика
+     * @return запрашиваемый эпик
      */
     public Epic getEpicById(Integer id) {
         return epics.get(id);
@@ -128,8 +113,8 @@ public class Manager {
     /**
      * создание нового таска
      *
-     * @param newTask
-     * @return Integer id
+     * @param newTask - новый объект класса task
+     * @return id созданного таска
      */
     public Integer createTask(Task newTask) {
         if (newTask != null) {
@@ -145,15 +130,18 @@ public class Manager {
 
     /**
      * создание нового сабтаска
+     * При создании проверяем, что переданный сабтаск соответсвует условиям:
+     * ссылка на сабтаск не null И сабтаск привязан к эпику И такой эпик существует
      *
-     * @param newSubtask
-     * @return Integer id
+     * @param newSubtask новый объект Subtask
+     * @return id созданного сабтаска
      */
     public Integer createSubtask(Subtask newSubtask) {
-        if ((newSubtask != null) && (newSubtask.getEpicId() != null)) {
+        Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
+        if (newSubtask != null && epicId != null && epics.containsKey(epicId)) {
             subtaskId += 1; //инкрементируем id сабтасков
             newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
-            epics.get(newSubtask.getEpicId()).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
+            epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
             subtasks.put(subtaskId, newSubtask); //складываем в хешмап
             return subtaskId;
         } else {
@@ -165,8 +153,8 @@ public class Manager {
     /**
      * создание нового эпика
      *
-     * @param newEpic
-     * @return Integer id
+     * @param newEpic новый объект Epic
+     * @return id созданного эпика
      */
     public Integer createEpic(Epic newEpic) {
         if (newEpic != null) {
@@ -183,11 +171,12 @@ public class Manager {
     /**
      * обновление тасков
      *
-     * @param freshTask
+     * @param updatedTask - обновленный таск
      */
-    public void updateTask(Task freshTask) {
-        if ((freshTask != null) && (tasks.containsKey(freshTask.getId()))) {
-            tasks.put(freshTask.getId(), freshTask); //добавляем обновленную задачу в список, заменяя прежнюю
+    public void updateTask(Task updatedTask) {
+        Integer updatedTaskId = updatedTask.getId(); //сохранили в переменную значение id переданного таска
+        if (updatedTask != null && tasks.containsKey(updatedTaskId)) {
+            tasks.put(updatedTaskId, updatedTask); //добавляем обновленную задачу в список, заменяя прежнюю
         } else {
             System.out.println("Невозможно обновить задачу!");
         }
@@ -195,14 +184,18 @@ public class Manager {
 
     /**
      * обновление сабтасков
+     * При обновлении проверяем, что переданный сабтаск соответсвует условиям:
+     * ссылка на сабтаск не null И сабтаск существует И его эпик существует
      *
-     * @param freshSubtask
+     * @param updatedSubtask обновленный сабтаск
      */
-    public void updateSubtask(Subtask freshSubtask) {
-        if ((freshSubtask != null) && (subtasks.containsKey(freshSubtask.getId()))
-                && (freshSubtask.getEpicId() != null)) {
-            subtasks.put(freshSubtask.getId(), freshSubtask); //добавляем обновленную подзадачу, заменяя прежнюю
-            updateEpicStatus(freshSubtask.getEpicId()); //вызываем метод пересчета статуса эпика
+    public void updateSubtask(Subtask updatedSubtask) {
+        Integer epicId = updatedSubtask.getEpicId(); //сохранили в переменную значение id Эпика,к кот. привязан сабтаск
+        Integer updatedSubtaskId = updatedSubtask.getId(); //сохранили в переменную id переданного сабтаска
+        if (updatedSubtask != null && subtasks.containsKey(updatedSubtaskId)
+                && epicId != null && epics.containsKey(epicId)) {
+            subtasks.put(updatedSubtaskId, updatedSubtask); //добавляем обновленную подзадачу, заменяя прежнюю
+            updateEpicStatus(epicId); //вызываем метод пересчета статуса эпика
         } else {
             System.out.println("Невозможно обновить подзадачу!");
         }
@@ -211,11 +204,12 @@ public class Manager {
     /**
      * обновление эпиков
      *
-     * @param freshEpic
+     * @param updatedEpic - обновляемый эпик
      */
-    public void updateEpic(Epic freshEpic) {
-        if ((freshEpic != null) && (epics.containsKey(freshEpic.getId()))) {
-            epics.put(freshEpic.getId(), freshEpic); //добавляем обновленную задачу в список, заменяя прежний
+    public void updateEpic(Epic updatedEpic) {
+        Integer updatedEpicId = updatedEpic.getId(); // сохранили в переменную id переданного эпика
+        if (updatedEpic != null && epics.containsKey(updatedEpicId)) {
+            epics.put(updatedEpicId, updatedEpic); //добавляем обновленную задачу в список, заменяя прежний
         } else {
             System.out.println("Невозможно обновить эпик'!");
         }
@@ -224,7 +218,7 @@ public class Manager {
     /**
      * удаление одного таска по id
      *
-     * @param id
+     * @param id удаляемой задачи
      */
     public void deleteTaskById(Integer id) {
         tasks.remove(id);
@@ -233,13 +227,14 @@ public class Manager {
     /**
      * Удаление одного сабтаска по id
      *
-     * @param id
+     * @param id удалаемой подзадачи
      */
     public void deleteSubtaskById(Integer id) {
         if (subtasks.containsKey(id)) {
-            if (getSubtaskById(id).getEpicId() != null) {
+            Integer epicId = getSubtaskById(id).getEpicId(); //id эпика, на кот.ссылается сабтаск
+            if (epicId != null && epics.containsKey(epicId)) {
                 /*из общего списка эпиков берем тот,на кот.ссылается сабтаск*/
-                Epic e = epics.get(getSubtaskById(id).getEpicId());
+                Epic e = epics.get(epicId);
                 e.deleteSubtask(id); // в найденном эпике удаляем подзадачу
                 updateEpicStatus(e.getId()); //обновляем статус эпика после удаления подзадачи
             }
@@ -252,10 +247,10 @@ public class Manager {
     /**
      * Удаление одного эпика по id
      *
-     * @param id
+     * @param id удаляемого эпика
      */
     public void deleteEpicById(Integer id) {
-        if (tasks.containsKey(id)) {
+        if (epics.containsKey(id)) {
             for (Integer i : epics.get(id).getSubtaskIds()) { //пробегаем по списку id подзадач эпика
                 subtasks.remove(i); //и удаляем эти подзадачи из общего списка подзадач (подзадачи не существуют без эпика)
             }
@@ -266,13 +261,13 @@ public class Manager {
     /**
      * обновление статуса эпика в зависимости от статусов подзадач
      *
-     * @param epicId
+     * @param epicId - id обновляемого эпика
      */
     private void updateEpicStatus(Integer epicId) {
         Epic epic = epics.get(epicId); //по переданному id достаем из хешмапы нужный эпик
-        int newAmount = 0; //количество подзадач со статусом NEW
-        int inProgressAmount = 0; // ...IN_PROGRESS
-        int doneAmount = 0; // ... DONE
+        boolean hasNewSubtasks = false; //наличие сабтасков со статусом NEW
+        boolean hasInProgressSubtasks = false; // ...IN_PROGRESS
+        boolean hasDoneSubtasks = false; // ... DONE
 
         if (!epics.containsKey(epicId)) { //если передан ошибочный ключ, выходим из метода
             System.out.println("Manager.updateEpicStatus: нет эпика с таким ключем");
@@ -280,26 +275,24 @@ public class Manager {
         }
         if (epic.getSubtaskIds().isEmpty()) { //если подзадач нет, то статус эпика NEW
             epic.setStatus(Status.NEW);
-        } else { //иначе
-            int subtaskAmount = 0; //объявляем переменную для хранения общего кол-ва подзадач эпика
+        } else {
             for (Integer s : epic.getSubtaskIds()) { //цикл по всем id подзадач данного эпика. посчитаем кол-во подзадач
                 Subtask subtask = subtasks.get(s); //берем из хешмапы подзадачу с нужным id
-                subtaskAmount += 1; //подсчитываем количество подхадач
                 switch (subtask.getStatus()) { //в зависимости от статуса подзадачи, увеличиваем нужный счетчик
                     case NEW:
-                        newAmount += 1; //увеличиваем счетчик новых задач
+                        hasNewSubtasks = true; // взводим флаг наличия подзадач в состоянии NEW
                         break;
                     case IN_PROGRESS:
-                        inProgressAmount += 1; //увеличиваем счетчик выполняемых задач
+                        hasInProgressSubtasks = true; // взводим флаг наличия подзадач в состоянии IN_PROGRESS
                         break;
                     case DONE:
-                        doneAmount += 1; //увеличиваем счетчик выполненных задач
+                        hasDoneSubtasks = true; // взводим флаг наличия подзадач в состоянии DONE
                         break;
                 }//switch
             } //for
-            if (doneAmount == subtaskAmount) { //если все подзадачи завершены
+            if (!hasNewSubtasks && !hasInProgressSubtasks && hasDoneSubtasks) { //если все подзадачи завершены
                 epic.setStatus(Status.DONE);
-            } else if (newAmount == subtaskAmount) { //если все подзадачи новые
+            } else if (hasNewSubtasks && !hasInProgressSubtasks && !hasDoneSubtasks) { //если все подзадачи новые
                 epic.setStatus(Status.NEW);
             } else { //если не все задачи завершены и не все задачи новые, то статус "в процессе"
                 epic.setStatus(Status.IN_PROGRESS);

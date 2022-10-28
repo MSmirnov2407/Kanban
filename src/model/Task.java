@@ -14,7 +14,9 @@ public class Task {
     }
 
     public Task(String name, String description) {
-        this(name, description, null);
+        this.name = name;
+        this.description = description;
+        this.status = Status.NEW;
     }
 
     public Integer getId() {

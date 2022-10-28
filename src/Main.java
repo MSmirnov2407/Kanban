@@ -1,6 +1,6 @@
-package servise;
 
 import model.*; //пакет с классами таск, сабтаск, эпик, enum Status
+import servise.*;
 
 public class Main {
     public static void main(String[] args) {
