@@ -137,13 +137,18 @@ public class Manager {
      * @return id созданного сабтаска
      */
     public Integer createSubtask(Subtask newSubtask) {
-        Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
-        if (newSubtask != null && epicId != null && epics.containsKey(epicId)) {
-            subtaskId += 1; //инкрементируем id сабтасков
-            newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
-            epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
-            subtasks.put(subtaskId, newSubtask); //складываем в хешмап
-            return subtaskId;
+        if (newSubtask != null) {
+            Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
+            if (epicId != null && epics.containsKey(epicId)) {
+                subtaskId += 1; //инкрементируем id сабтасков
+                newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
+                epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
+                subtasks.put(subtaskId, newSubtask); //складываем в хешмап
+                return subtaskId;
+            } else {
+                System.out.println("Ошибка создания подзадачи: недостоверное значение Id эпика");
+                return null;
+            }
         } else {
             System.out.println("Ошибка создания подзадачи: получена ссылка со значением null");
             return null;
@@ -174,11 +179,15 @@ public class Manager {
      * @param updatedTask - обновленный таск
      */
     public void updateTask(Task updatedTask) {
-        Integer updatedTaskId = updatedTask.getId(); //сохранили в переменную значение id переданного таска
-        if (updatedTask != null && tasks.containsKey(updatedTaskId)) {
-            tasks.put(updatedTaskId, updatedTask); //добавляем обновленную задачу в список, заменяя прежнюю
+        if (updatedTask != null) {
+            Integer updatedTaskId = updatedTask.getId(); //сохранили в переменную значение id переданного таска
+            if (tasks.containsKey(updatedTaskId)) {
+                tasks.put(updatedTaskId, updatedTask); //добавляем обновленную задачу в список, заменяя прежнюю
+            } else {
+                System.out.println("Ошибка обновления задачи: не найден Таск по id");
+            }
         } else {
-            System.out.println("Невозможно обновить задачу!");
+            System.out.println("Ошибка обновления задачи: получена ссылка со значением null");
         }
     }
 
@@ -190,14 +199,17 @@ public class Manager {
      * @param updatedSubtask обновленный сабтаск
      */
     public void updateSubtask(Subtask updatedSubtask) {
-        Integer epicId = updatedSubtask.getEpicId(); //сохранили в переменную значение id Эпика,к кот. привязан сабтаск
-        Integer updatedSubtaskId = updatedSubtask.getId(); //сохранили в переменную id переданного сабтаска
-        if (updatedSubtask != null && subtasks.containsKey(updatedSubtaskId)
-                && epicId != null && epics.containsKey(epicId)) {
-            subtasks.put(updatedSubtaskId, updatedSubtask); //добавляем обновленную подзадачу, заменяя прежнюю
-            updateEpicStatus(epicId); //вызываем метод пересчета статуса эпика
+        if (updatedSubtask != null) {
+            Integer epicId = updatedSubtask.getEpicId(); //значение id Эпика,к кот. привязан сабтаск
+            Integer updatedSubtaskId = updatedSubtask.getId(); //id переданного сабтаска
+            if (subtasks.containsKey(updatedSubtaskId) && epicId != null && epics.containsKey(epicId)) {
+                subtasks.put(updatedSubtaskId, updatedSubtask); //добавляем обновленную подзадачу, заменяя прежнюю
+                updateEpicStatus(epicId); //вызываем метод пересчета статуса эпика
+            } else {
+                System.out.println("Ошибка обновления подзадачи: на найден сабтаск или эпик");
+            }
         } else {
-            System.out.println("Невозможно обновить подзадачу!");
+            System.out.println("Ошибка обновления подзадачи: получена ссылка со знаением null");
         }
     }
 
