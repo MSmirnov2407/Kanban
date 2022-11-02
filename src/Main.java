@@ -6,6 +6,9 @@ public class Main {
     public static void main(String[] args) {
         InMemoryTaskManager manager = new InMemoryTaskManager(); //создаем объект менеджера
         Integer id; //переменная для временного хранения id при промежуточных действиях
+        Task task; //вспомогательные переменные для хранения объектов
+        Subtask subtask;
+        Epic epic;
 
         /*создаем две задачи*/
         manager.createTask(new Task("Посмотреть фильм", "Персонаж (2006 г)"));
@@ -22,15 +25,23 @@ public class Main {
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
         /*изменим статусы задач*/
-        manager.getTaskById(1).setStatus(Status.IN_PROGRESS);
-        manager.updateTask(manager.getTaskById(1));
-        manager.getTaskById(2).setStatus(Status.DONE);
-        manager.updateTask(manager.getTaskById(2));
+        task = manager.getTaskById(1);
+        task.setStatus(Status.IN_PROGRESS);
+        manager.updateTask(task);
+        task = manager.getTaskById(2);
+        task.setStatus(Status.DONE);
+        manager.updateTask(task);
+        /*посмотрим историю просмотра задач*/
+        System.out.println("ИСТОРИЯ: " + manager.getHistory());
         /*изменим статусы подзадач*/
-        manager.getSubtaskById(2).setStatus(Status.DONE);
-        manager.updateSubtask(manager.getSubtaskById(2));
-        manager.getSubtaskById(3).setStatus(Status.IN_PROGRESS);
-        manager.updateSubtask(manager.getSubtaskById(3));
+        subtask = manager.getSubtaskById(2);
+        subtask.setStatus(Status.DONE);
+        manager.updateSubtask(subtask);
+        subtask = manager.getSubtaskById(3);
+        subtask.setStatus(Status.IN_PROGRESS);
+        manager.updateSubtask(subtask);
+        /*посмотрим историю просмотра задач*/
+        System.out.println("ИСТОРИЯ: " + manager.getHistory());
         /*посмотрим на состояние объектов через печать*/
         System.out.println();
         System.out.println("tasks: " + manager.getTasks());
@@ -44,5 +55,6 @@ public class Main {
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
+
     }
 }

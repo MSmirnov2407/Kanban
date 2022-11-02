@@ -17,6 +17,8 @@ public class InMemoryTaskManager implements TaskManager {
     private int taskId; //id задач, инициализируется по умолчанию 0
     private int subtaskId; //id подзадач, инициализируется по умолчанию 0
     private int epicId; //id эпиков, инициализируется по умолчанию 0
+    private final ArrayList<Task> viewedTaskHistory = new ArrayList<>(); //история просмотров
+    private final int maxHistoryLength = 10; //максимальное количество записей в истории
 
     /**
      * конструктор менеджера
@@ -94,7 +96,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public Task getTaskById(Integer id) {
-        return tasks.get(id);
+        Task task = tasks.get(id); //взяли таск из общего списка
+        viewedTaskHistory.add(task); //сохранили в истории просмотров
+        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
+            viewedTaskHistory.remove(0); //удаляем самый старый
+        }
+        return task;
     }
 
     /**
@@ -105,7 +112,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public Subtask getSubtaskById(Integer id) {
-        return subtasks.get(id);
+        Subtask subtask = subtasks.get(id); //взяли сабтаск из общего списка
+        viewedTaskHistory.add(subtask); //сохранили в истории просмотров
+        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
+            viewedTaskHistory.remove(0); //удаляем самый старый
+        }
+        return subtask;
     }
 
     /**
@@ -116,7 +128,12 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public Epic getEpicById(Integer id) {
-        return epics.get(id);
+        Epic epic = epics.get(id); //взяли сабтаск из общего списка
+        viewedTaskHistory.add(epic); //сохранили в истории просмотров
+        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
+            viewedTaskHistory.remove(0); //удаляем самый старый
+        }
+        return epic;
     }
 
     /**
@@ -295,7 +312,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public List<Task> getHistory() {
-        return new ArrayList<Task>();
+        return viewedTaskHistory;
     }
 
     /**
