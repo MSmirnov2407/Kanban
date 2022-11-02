@@ -5,12 +5,12 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
-import javax.print.attribute.IntegerSyntax;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 
-public class Manager {
+public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks;   //список задач
     private Map<Integer, Subtask> subtasks; //список подзадач
     private Map<Integer, Epic> epics; //список эпиков
@@ -21,7 +21,7 @@ public class Manager {
     /**
      * конструктор менеджера
      */
-    public Manager() {
+    public InMemoryTaskManager() {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
@@ -32,6 +32,7 @@ public class Manager {
      *
      * @return список Тасков
      */
+    @Override
     public ArrayList<Task> getTasks() {
         return new ArrayList<>(tasks.values());
     }
@@ -41,6 +42,7 @@ public class Manager {
      *
      * @return Список Сабтасков
      */
+    @Override
     public ArrayList<Subtask> getSubtasks() {
         return new ArrayList<>(subtasks.values());
     }
@@ -50,6 +52,7 @@ public class Manager {
      *
      * @return Список эпиков
      */
+    @Override
     public ArrayList<Epic> getEpics() {
         return new ArrayList<>(epics.values());
     }
@@ -57,6 +60,7 @@ public class Manager {
     /**
      * Удаление всех задач
      */
+    @Override
     public void deleteAllTasks() {
         tasks.clear();
     }
@@ -64,6 +68,7 @@ public class Manager {
     /**
      * удаление всех подзадач
      */
+    @Override
     public void deleteAllSubtasks() {
         for (Epic epic : epics.values()) { //для каждого эпика в общем списке эпиков
             epic.getSubtaskIds().clear(); //очищаем список подзадач
@@ -75,6 +80,7 @@ public class Manager {
     /**
      * удаление всех эпиков
      */
+    @Override
     public void deleteAllEpics() {
         epics.clear();
         subtasks.clear(); //сабтаски не существуют без эпиков
@@ -86,6 +92,7 @@ public class Manager {
      * @param id запрашиваемого таска
      * @return запрашиваемый таск
      */
+    @Override
     public Task getTaskById(Integer id) {
         return tasks.get(id);
     }
@@ -96,6 +103,7 @@ public class Manager {
      * @param id запрашиваемого сабтаска
      * @return запрашиваемый сабтаск
      */
+    @Override
     public Subtask getSubtaskById(Integer id) {
         return subtasks.get(id);
     }
@@ -106,6 +114,7 @@ public class Manager {
      * @param id запрашиваемого эпика
      * @return запрашиваемый эпик
      */
+    @Override
     public Epic getEpicById(Integer id) {
         return epics.get(id);
     }
@@ -116,6 +125,7 @@ public class Manager {
      * @param newTask - новый объект класса task
      * @return id созданного таска
      */
+    @Override
     public Integer createTask(Task newTask) {
         if (newTask != null) {
             taskId += 1; //инкрементируем id тасков
@@ -136,6 +146,7 @@ public class Manager {
      * @param newSubtask новый объект Subtask
      * @return id созданного сабтаска
      */
+    @Override
     public Integer createSubtask(Subtask newSubtask) {
         if (newSubtask != null) {
             Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
@@ -161,6 +172,7 @@ public class Manager {
      * @param newEpic новый объект Epic
      * @return id созданного эпика
      */
+    @Override
     public Integer createEpic(Epic newEpic) {
         if (newEpic != null) {
             epicId += 1; //инкрементируем id эпиков
@@ -178,6 +190,7 @@ public class Manager {
      *
      * @param updatedTask - обновленный таск
      */
+    @Override
     public void updateTask(Task updatedTask) {
         if (updatedTask != null) {
             Integer updatedTaskId = updatedTask.getId(); //сохранили в переменную значение id переданного таска
@@ -198,6 +211,7 @@ public class Manager {
      *
      * @param updatedSubtask обновленный сабтаск
      */
+    @Override
     public void updateSubtask(Subtask updatedSubtask) {
         if (updatedSubtask != null) {
             Integer epicId = updatedSubtask.getEpicId(); //значение id Эпика,к кот. привязан сабтаск
@@ -218,6 +232,7 @@ public class Manager {
      *
      * @param updatedEpic - обновляемый эпик
      */
+    @Override
     public void updateEpic(Epic updatedEpic) {
         Integer updatedEpicId = updatedEpic.getId(); // сохранили в переменную id переданного эпика
         if (updatedEpic != null && epics.containsKey(updatedEpicId)) {
@@ -232,6 +247,7 @@ public class Manager {
      *
      * @param id удаляемой задачи
      */
+    @Override
     public void deleteTaskById(Integer id) {
         tasks.remove(id);
     }
@@ -241,6 +257,7 @@ public class Manager {
      *
      * @param id удалаемой подзадачи
      */
+    @Override
     public void deleteSubtaskById(Integer id) {
         if (subtasks.containsKey(id)) {
             Integer epicId = getSubtaskById(id).getEpicId(); //id эпика, на кот.ссылается сабтаск
@@ -261,6 +278,7 @@ public class Manager {
      *
      * @param id удаляемого эпика
      */
+    @Override
     public void deleteEpicById(Integer id) {
         if (epics.containsKey(id)) {
             for (Integer i : epics.get(id).getSubtaskIds()) { //пробегаем по списку id подзадач эпика
@@ -268,6 +286,16 @@ public class Manager {
             }
             epics.remove(id); //после этого удаляем сам эпик.
         }
+    }
+
+    /**
+     * Вернуть историю просмотров задач
+     *
+     * @return список Тасков/подтасков/эпиков
+     */
+    @Override
+    public List<Task> getHistory() {
+        return new ArrayList<Task>();
     }
 
     /**
