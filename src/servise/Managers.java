@@ -8,4 +8,12 @@ public final class Managers {
     public static TaskManager getDefault(){
         return new InMemoryTaskManager();
     }
+
+    /**
+     * Возвращаем новый объект менеджера Истории просмотров по умолчанию
+     * @return объект менеджера истории просмотров
+     */
+    public static HistoryManager getDefaultHistory(){
+        return new InMemoryHistoryManager();
+    }
 }

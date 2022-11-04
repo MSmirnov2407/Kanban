@@ -31,8 +31,8 @@ public class Main {
         task = manager.getTaskById(2);
         task.setStatus(Status.DONE);
         manager.updateTask(task);
-        /*посмотрим историю просмотра задач*/
-        System.out.println("ИСТОРИЯ: " + manager.getHistory());
+        /*выведем историю просмотра задач*/
+        System.out.println("ИСТОРИЯ 1: " + manager.getHistory());
         /*изменим статусы подзадач*/
         subtask = manager.getSubtaskById(2);
         subtask.setStatus(Status.DONE);
@@ -40,8 +40,8 @@ public class Main {
         subtask = manager.getSubtaskById(3);
         subtask.setStatus(Status.IN_PROGRESS);
         manager.updateSubtask(subtask);
-        /*посмотрим историю просмотра задач*/
-        System.out.println("ИСТОРИЯ: " + manager.getHistory());
+        /*выведем историю просмотра задач*/
+        System.out.println("ИСТОРИЯ 2: " + manager.getHistory());
         /*посмотрим на состояние объектов через печать*/
         System.out.println();
         System.out.println("tasks: " + manager.getTasks());
@@ -55,6 +55,11 @@ public class Main {
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
-
+        /*выведем историю просмотра задач*/
+        System.out.println("ИСТОРИЯ 3: " + manager.getHistory());
+        /* удлим один сабтаск*/
+        manager.deleteSubtaskById(3);
+        /*выведем историю просмотра задач*/
+        System.out.println("ИСТОРИЯ 4: " + manager.getHistory());
     }
 }

@@ -17,7 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     private int taskId; //id задач, инициализируется по умолчанию 0
     private int subtaskId; //id подзадач, инициализируется по умолчанию 0
     private int epicId; //id эпиков, инициализируется по умолчанию 0
-    private final ArrayList<Task> viewedTaskHistory = new ArrayList<>(); //история просмотров
+    private final ArrayList<Task> viewedTaskHistory; //история просмотров
     private final int maxHistoryLength = 10; //максимальное количество записей в истории
 
     /**
@@ -27,6 +27,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
+        viewedTaskHistory = new ArrayList<>();
     }
 
     /**
