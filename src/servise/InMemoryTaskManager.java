@@ -17,8 +17,7 @@ public class InMemoryTaskManager implements TaskManager {
     private int taskId; //id задач, инициализируется по умолчанию 0
     private int subtaskId; //id подзадач, инициализируется по умолчанию 0
     private int epicId; //id эпиков, инициализируется по умолчанию 0
-    private final ArrayList<Task> viewedTaskHistory; //история просмотров
-    private final int maxHistoryLength = 10; //максимальное количество записей в истории
+    private HistoryManager historyManager; //менеджер истории просмотров
 
     /**
      * конструктор менеджера
@@ -27,7 +26,7 @@ public class InMemoryTaskManager implements TaskManager {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
-        viewedTaskHistory = new ArrayList<>();
+        historyManager = Managers.getDefaultHistory(); //создаем менеджер историй по усолчанию
     }
 
     /**
@@ -98,10 +97,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Task getTaskById(Integer id) {
         Task task = tasks.get(id); //взяли таск из общего списка
-        viewedTaskHistory.add(task); //сохранили в истории просмотров
-        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
-            viewedTaskHistory.remove(0); //удаляем самый старый
-        }
+        historyManager.add(task); //сохранили в истории просмотров
         return task;
     }
 
@@ -114,10 +110,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Subtask getSubtaskById(Integer id) {
         Subtask subtask = subtasks.get(id); //взяли сабтаск из общего списка
-        viewedTaskHistory.add(subtask); //сохранили в истории просмотров
-        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
-            viewedTaskHistory.remove(0); //удаляем самый старый
-        }
+        historyManager.add(subtask); //сохранили в истории просмотров
         return subtask;
     }
 
@@ -130,10 +123,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Epic getEpicById(Integer id) {
         Epic epic = epics.get(id); //взяли сабтаск из общего списка
-        viewedTaskHistory.add(epic); //сохранили в истории просмотров
-        if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
-            viewedTaskHistory.remove(0); //удаляем самый старый
-        }
+        historyManager.add(epic); //сохранили в истории просмотров
         return epic;
     }
 
@@ -313,7 +303,7 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public List<Task> getHistory() {
-        return viewedTaskHistory;
+        return historyManager.getHistory();
     }
 
     /**

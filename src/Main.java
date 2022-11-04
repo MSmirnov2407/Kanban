@@ -4,7 +4,7 @@ import servise.*;
 
 public class Main {
     public static void main(String[] args) {
-        InMemoryTaskManager manager = new InMemoryTaskManager(); //создаем объект менеджера
+        TaskManager manager = Managers.getDefault(); //создаем объект менеджера
         Integer id; //переменная для временного хранения id при промежуточных действиях
         Task task; //вспомогательные переменные для хранения объектов
         Subtask subtask;
