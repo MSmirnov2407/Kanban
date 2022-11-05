@@ -25,19 +25,19 @@ public class Main {
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
         /*изменим статусы задач*/
-        task = manager.getTaskById(1);
+        task = manager.getTaskById(0);
         task.setStatus(Status.IN_PROGRESS);
         manager.updateTask(task);
-        task = manager.getTaskById(2);
+        task = manager.getTaskById(1);
         task.setStatus(Status.DONE);
         manager.updateTask(task);
         /*выведем историю просмотра задач*/
         System.out.println("ИСТОРИЯ 1: " + manager.getHistory());
         /*изменим статусы подзадач*/
-        subtask = manager.getSubtaskById(2);
+        subtask = manager.getSubtaskById(3);
         subtask.setStatus(Status.DONE);
         manager.updateSubtask(subtask);
-        subtask = manager.getSubtaskById(3);
+        subtask = manager.getSubtaskById(4);
         subtask.setStatus(Status.IN_PROGRESS);
         manager.updateSubtask(subtask);
         /*выведем историю просмотра задач*/
@@ -48,8 +48,8 @@ public class Main {
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
         /*удалим один таск и один эпик*/
-        manager.deleteTaskById(2);
-        manager.deleteEpicById(1);
+        manager.deleteTaskById(1);
+        manager.deleteEpicById(5);
         /*посмотрим на состояние объектов через печать*/
         System.out.println();
         System.out.println("tasks: " + manager.getTasks());
@@ -58,7 +58,7 @@ public class Main {
         /*выведем историю просмотра задач*/
         System.out.println("ИСТОРИЯ 3: " + manager.getHistory());
         /* удлим один сабтаск*/
-        manager.deleteSubtaskById(3);
+        manager.deleteSubtaskById(4);
         /*выведем историю просмотра задач*/
         System.out.println("ИСТОРИЯ 4: " + manager.getHistory());
     }

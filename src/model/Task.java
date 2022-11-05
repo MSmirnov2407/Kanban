@@ -6,7 +6,6 @@ public class Task {
     protected String description; //описание
     protected Status status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
 
-
     public Task(String name, String description, Integer id) {
         this(name, description);
         this.id = id;

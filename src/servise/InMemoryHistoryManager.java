@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
-    private final ArrayList<Task> viewedTaskHistory; //история просмотров
-    private final int maxHistoryLength = 10; //максимальное количество записей в истории
+    private final List<Task> viewedTaskHistory; //история просмотров
+    private final int MAX_HISTORY_LENGTH = 10; //максимальное количество записей в истории
 
     /**
      * конструктор менеджера истории просмотров
@@ -26,7 +26,7 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void add(Task task) {
         if (task != null) {
             viewedTaskHistory.add(task); //добавляем полученный такс в список
-            if (viewedTaskHistory.size() > maxHistoryLength) { //если длина истории превысила 10 запросов
+            if (viewedTaskHistory.size() > MAX_HISTORY_LENGTH) { //если длина истории превысила 10 запросов
                 viewedTaskHistory.remove(0); //удаляем самый старый
             }
         }
@@ -41,5 +41,4 @@ public class InMemoryHistoryManager implements HistoryManager {
     public List<Task> getHistory() {
         return viewedTaskHistory;
     }
-
 }

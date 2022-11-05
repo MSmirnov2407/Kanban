@@ -22,9 +22,7 @@ public class Epic extends Task {
         subtaskIds.add(subtask.getId());
     } //добавляем подзадачу в список этого эпика
 
-    public void deleteSubtask(Integer sabtaskId) {
-        if (subtaskIds.contains(sabtaskId)) {
-            subtaskIds.remove(sabtaskId);
-        }
+    public void deleteSubtask(Integer subtaskId) {
+            subtaskIds.remove(subtaskId);
     } //удаление одного сабтаска из эпика
 }

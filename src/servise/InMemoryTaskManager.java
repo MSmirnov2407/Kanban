@@ -14,9 +14,7 @@ public class InMemoryTaskManager implements TaskManager {
     private Map<Integer, Task> tasks;   //список задач
     private Map<Integer, Subtask> subtasks; //список подзадач
     private Map<Integer, Epic> epics; //список эпиков
-    private int taskId; //id задач, инициализируется по умолчанию 0
-    private int subtaskId; //id подзадач, инициализируется по умолчанию 0
-    private int epicId; //id эпиков, инициализируется по умолчанию 0
+    private int id; // id для всех типов задач
     private HistoryManager historyManager; //менеджер истории просмотров
 
     /**
@@ -136,7 +134,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createTask(Task newTask) {
         if (newTask != null) {
-            taskId += 1; //инкрементируем id тасков
+            int taskId = generateId(); //формируем id для таска
             newTask.setId(taskId); //присваиваем новый id новому таску
             tasks.put(taskId, newTask); //складываем в хешмап
             return taskId;
@@ -159,7 +157,7 @@ public class InMemoryTaskManager implements TaskManager {
         if (newSubtask != null) {
             Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
             if (epicId != null && epics.containsKey(epicId)) {
-                subtaskId += 1; //инкрементируем id сабтасков
+                int subtaskId = generateId(); //формируем id для сабтаска
                 newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
                 epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
                 subtasks.put(subtaskId, newSubtask); //складываем в хешмап
@@ -183,7 +181,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createEpic(Epic newEpic) {
         if (newEpic != null) {
-            epicId += 1; //инкрементируем id эпиков
+            int epicId = generateId(); //формируем id для эпика
             newEpic.setId(epicId); //присваиваем новый id новому эпику
             epics.put(epicId, newEpic); //складываем в хешмап
             return epicId;
@@ -268,7 +266,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteSubtaskById(Integer id) {
         if (subtasks.containsKey(id)) {
-            Integer epicId = getSubtaskById(id).getEpicId(); //id эпика, на кот.ссылается сабтаск
+            Integer epicId = subtasks.get(id).getEpicId(); //id эпика, на кот.ссылается сабтаск
             if (epicId != null && epics.containsKey(epicId)) {
                 /*из общего списка эпиков берем тот,на кот.ссылается сабтаск*/
                 Epic e = epics.get(epicId);
@@ -346,5 +344,14 @@ public class InMemoryTaskManager implements TaskManager {
                 epic.setStatus(Status.IN_PROGRESS);
             }
         } //if (epic.getSubtasks().isEmpty())
+    }
+
+    /**
+     * Генерация id для таксков/сабтасков/эпиков
+     *
+     * @return сгенерированный id
+     */
+    private int generateId() {
+        return id++;
     }
 }

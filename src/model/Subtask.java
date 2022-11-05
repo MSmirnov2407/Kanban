@@ -3,10 +3,6 @@ package model;
 public class Subtask extends Task {
     private Integer epicId; //эпик которому принадлежит подзадача
 
-    public Subtask(String name, String description) {
-        this(name, description, null, null);
-    } //конструктор
-
     public Subtask(String name, String description, Integer epicId) {
         this(name, description, epicId, null);
     } //конструктор
