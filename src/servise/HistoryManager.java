@@ -17,5 +17,5 @@ public interface HistoryManager {
      *
      * @return спискок просмотренных задач/подзадач/эпиков
      */
-    List<Task> getHistory(); //вывести список просмотренных задач
+    List<Task> getHistory();
 }
