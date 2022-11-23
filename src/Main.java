@@ -13,53 +13,35 @@ public class Main {
         /*создаем две задачи*/
         manager.createTask(new Task("Посмотреть фильм", "Персонаж (2006 г)"));
         manager.createTask(new Task("Постричь собаку", "а то уже глаз не видно"));
-        /* создаем эпик с двумя подзадачами*/
+        /* создаем эпик с тремя подзадачами*/
         id = manager.createEpic(new Epic("Приготовить суп", "лёгенький суп из бульона и зажарки"));
         manager.createSubtask(new Subtask("сварить бульон", "куриный", id));
         manager.createSubtask(new Subtask("сделать зажарку", "лук+морковь", id));
-        /* создаем эпик с одной подзадачей*/
-        id = manager.createEpic(new Epic("Закрыть сессию", "первая сессия первого курса"));
-        manager.createSubtask(new Subtask("Сдать физику", "12 апреля, каб.33", id));
+        manager.createSubtask(new Subtask("добавить зажарку в бульон", "вроде конец", id));
+        /* создаем эпик с без подзадач*/
+        manager.createEpic(new Epic("Закрыть сессию", "первая сессия первого курса"));
         /*посмотрим на состояние объектов через печать*/
         System.out.println("tasks: " + manager.getTasks());
         System.out.println("epics: " + manager.getEpics());
         System.out.println("subtask: " + manager.getSubtasks());
-        /*изменим статусы задач*/
-        task = manager.getTaskById(0);
-        task.setStatus(Status.IN_PROGRESS);
-        manager.updateTask(task);
-        task = manager.getTaskById(1);
-        task.setStatus(Status.DONE);
-        manager.updateTask(task);
-        /*выведем историю просмотра задач*/
+        /*запрос созданных задач в разном порядке и проверка истории*/
+        manager.getTaskById(0);
+        manager.getTaskById(1);
+        manager.getSubtaskById(3);
+        manager.getSubtaskById(4);
+        manager.getSubtaskById(5);
+        manager.getEpicById(2);
+        manager.getEpicById(6);
         System.out.println("ИСТОРИЯ 1: " + manager.getHistory());
-        /*изменим статусы подзадач*/
-        subtask = manager.getSubtaskById(3);
-        subtask.setStatus(Status.DONE);
-        manager.updateSubtask(subtask);
-        subtask = manager.getSubtaskById(4);
-        subtask.setStatus(Status.IN_PROGRESS);
-        manager.updateSubtask(subtask);
-        /*выведем историю просмотра задач*/
+        manager.getTaskById(1);
+        manager.getSubtaskById(3);
+        manager.getSubtaskById(4);
         System.out.println("ИСТОРИЯ 2: " + manager.getHistory());
-        /*посмотрим на состояние объектов через печать*/
-        System.out.println();
-        System.out.println("tasks: " + manager.getTasks());
-        System.out.println("epics: " + manager.getEpics());
-        System.out.println("subtask: " + manager.getSubtasks());
-        /*удалим один таск и один эпик*/
+        /*удалим задачу, которая есть в истории и проверим историю*/
         manager.deleteTaskById(1);
-        manager.deleteEpicById(5);
-        /*посмотрим на состояние объектов через печать*/
-        System.out.println();
-        System.out.println("tasks: " + manager.getTasks());
-        System.out.println("epics: " + manager.getEpics());
-        System.out.println("subtask: " + manager.getSubtasks());
-        /*выведем историю просмотра задач*/
         System.out.println("ИСТОРИЯ 3: " + manager.getHistory());
-        /* удлим один сабтаск*/
-        manager.deleteSubtaskById(4);
-        /*выведем историю просмотра задач*/
+        /*удалим эпик с подзадачами. провеим историю*/
+        manager.deleteEpicById(2);
         System.out.println("ИСТОРИЯ 4: " + manager.getHistory());
     }
 }

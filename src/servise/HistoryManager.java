@@ -18,4 +18,11 @@ public interface HistoryManager {
      * @return спискок просмотренных задач/подзадач/эпиков
      */
     List<Task> getHistory();
+
+    /**
+     * Удалить элемент из истории просмотра по id
+     *
+     * @param id удаляемой из истории задачи
+     */
+    void remove(int id);
 }
