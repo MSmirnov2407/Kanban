@@ -28,8 +28,8 @@ public class InMemoryHistoryManager implements HistoryManager {
     @Override
     public void add(Task task) {
         if (task != null) {
-            int id = task.getId();
-            removeNode(new Node(null, task, null)); // удаляем из списка старую инф.о просмотре этой задачи
+            int id = task.getId(); //взяли id полученного таска
+            remove(id); // удалили старую инф. о его последнем вызове
             linkLast(task); //добавляем задачу в конец двусвязного списка и в мапу
         }
     }
@@ -46,14 +46,14 @@ public class InMemoryHistoryManager implements HistoryManager {
 
     /**
      * Удалить элемент из истории просмотра по id
+     * задача удаляется и из мапы и из связного списка
      *
      * @param id удаляемой из истории задачи
      */
     @Override
     public void remove(int id) {
-        Node node = viewedTaskHistory.get(id); //берем узел из мапы по id
-        if (node != null) {
-            removeNode(node); //удаляем задачу из связного списка и из мапы
+        if (viewedTaskHistory.containsKey(id)) {
+            removeNode(viewedTaskHistory.remove(id)); //удаляем задачу из мапы и из связного списка
         }
     }
 
@@ -66,8 +66,7 @@ public class InMemoryHistoryManager implements HistoryManager {
         Node newNode = new Node(tail, newTask, null);
         if (head == null) { //если это первый элемент, сохраняем указатель head
             head = newNode;
-        }
-        if (tail != null) { //если последний элемент существует, то связываем его с новым
+        } else {
             tail.next = newNode;
         }
         tail = newNode; // передвигаем указатель последнего элемента на новый элемент
@@ -75,28 +74,21 @@ public class InMemoryHistoryManager implements HistoryManager {
     }
 
     /**
-     * удаление задачи из списка (и из hashMap и из LinkedList
+     * удаление узла из связного сипска
      *
-     * @param node -удаляемая задача
+     * @param node -удаляемая задача в виде узла списка
      */
     public void removeNode(Node node) {
-        Task task = node.data;
-        if (task != null) {
-            int id = task.getId(); //взяли id удаляемой задачи
-            viewedTaskHistory.remove(id); // удаляем из мапы
-            for (Node x = head; x != null; x = x.next) { //итерируемся по элементам линкедЛиста
-                if (task.getId() == x.data.getId()) { //если id тасков совпадают привязываем соседей друг к другу
-                    if (x == head) { //если элемент первый в списке
-                        head = x.next;
-                        head.prev = null;
-                    } else if (x == tail) { // если элемент последний в списке
-                        tail = x.prev;
-                        tail.next = null;
-                    } else { //элемент в середине списка
-                        x.prev.next = x.next;
-                        x.next.prev = x.prev;
-                    }
-                }
+        if (node != null) {
+            if (node == head) { //если элемент первый в списке
+                head = node.next;
+                head.prev = null;
+            } else if (node == tail) { // если элемент последний в списке
+                tail = node.prev;
+                tail.next = null;
+            } else { //элемент в середине списка
+                node.prev.next = node.next;
+                node.next.prev = node.prev;
             }
         }
     }
