@@ -5,6 +5,7 @@ import model.Node;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 public class InMemoryHistoryManager implements HistoryManager {
@@ -52,9 +53,7 @@ public class InMemoryHistoryManager implements HistoryManager {
      */
     @Override
     public void remove(int id) {
-        if (viewedTaskHistory.containsKey(id)) {
-            removeNode(viewedTaskHistory.remove(id)); //удаляем задачу из мапы и из связного списка
-        }
+        removeNode(viewedTaskHistory.remove(id)); //удаляем задачу из мапы и из связного списка
     }
 
     /**
@@ -81,14 +80,14 @@ public class InMemoryHistoryManager implements HistoryManager {
     public void removeNode(Node node) {
         if (node != null) {
             if (node == head) { //если элемент первый в списке
-                head = node.next;
-                head.prev = null;
-            } else if (node == tail) { // если элемент последний в списке
-                tail = node.prev;
-                tail.next = null;
-            } else { //элемент в середине списка
-                node.prev.next = node.next;
-                node.next.prev = node.prev;
+                head = node.next; // то указатель первого элемента сместится на следующий
+            } else { //если нет, значит есть предыдущий элемент
+                node.prev.next = node.next; //значит предыдущий ссылаем на следующий
+            }
+            if (node == tail) { //если элемент последний в списке
+                tail = node.prev; //то указатель последнего смещаем на предыдущий
+            } else { //если нет, значит есть следующий элемент
+                node.next.prev = node.prev; //значит ссылаем следующий на предыдущий.
             }
         }
     }
