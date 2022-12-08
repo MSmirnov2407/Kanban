@@ -1,5 +1,7 @@
 package servise;
 
+import java.nio.file.Path;
+
 public final class Managers {
     /**
      * Возвращаем новый объект менеджера задач по умолчанию
@@ -17,5 +19,15 @@ public final class Managers {
      */
     public static HistoryManager getDefaultHistory() {
         return new InMemoryHistoryManager();
+    }
+
+    /**
+     * возвращаем менеджер задач, хранящий информацию в файле
+     *
+     * @param fileName - имя файла
+     * @return объект менеджера задач
+     */
+    public static FileBackedTasksManager getFileBackedTaskManager(String fileName) {
+        return new FileBackedTasksManager(fileName);
     }
 }

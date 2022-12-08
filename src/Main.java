@@ -2,9 +2,12 @@
 import model.*; //пакет с классами таск, сабтаск, эпик, enum Status
 import servise.*;
 
+import java.io.File;
+
 public class Main {
     public static void main(String[] args) {
-        TaskManager manager = Managers.getDefault(); //создаем объект менеджера
+        String fileName = "src/file1.csv";
+        TaskManager manager = Managers.getFileBackedTaskManager(fileName); //создаем объект менеджера
         Integer id; //переменная для временного хранения id при промежуточных действиях
         Task task; //вспомогательные переменные для хранения объектов
         Subtask subtask;
@@ -33,10 +36,17 @@ public class Main {
         manager.getEpicById(2);
         manager.getEpicById(6);
         System.out.println("ИСТОРИЯ 1: " + manager.getHistory());
+        /*внесение изменений в истории просмотров*/
         manager.getTaskById(1);
         manager.getSubtaskById(3);
         manager.getSubtaskById(4);
         System.out.println("ИСТОРИЯ 2: " + manager.getHistory());
+        /*создание нового менеджера по данным из файла*/
+        FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(new File(fileName));
+        System.out.println("file_tasks: " + fileBackedTasksManager.getTasks());
+        System.out.println("file_epics: " + fileBackedTasksManager.getEpics());
+        System.out.println("file_subtask: " + fileBackedTasksManager.getSubtasks());
+        System.out.println("file_ИСТОРИЯ 2: " + fileBackedTasksManager.getHistory());
         /*удалим задачу, которая есть в истории и проверим историю*/
         manager.deleteTaskById(1);
         System.out.println("ИСТОРИЯ 3: " + manager.getHistory());

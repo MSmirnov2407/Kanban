@@ -1,0 +1,5 @@
+id,type,name,status,description,epic 
+0,TASK,Посмотреть фильм,NEW,Персонаж (2006 г)
+6,EPIC,Закрыть сессию,NEW,первая сессия первого курса
+
+0,6

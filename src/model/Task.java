@@ -51,6 +51,8 @@ public class Task {
 
     @Override
     public String toString() {
-        return ("id= " + this.id + ", name= " + this.name + ", status= " + this.status);
+        String taskAsString = String.join(",", id.toString(), TaskType.TASK.toString(), name,
+                status.toString(), description);
+        return taskAsString;
     }
 }

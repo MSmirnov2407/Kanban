@@ -11,11 +11,11 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class InMemoryTaskManager implements TaskManager {
-    private Map<Integer, Task> tasks;   //список задач
-    private Map<Integer, Subtask> subtasks; //список подзадач
-    private Map<Integer, Epic> epics; //список эпиков
-    private int id; // id для всех типов задач
-    private HistoryManager historyManager; //менеджер истории просмотров
+    protected Map<Integer, Task> tasks;   //список задач
+    protected Map<Integer, Subtask> subtasks; //список подзадач
+    protected Map<Integer, Epic> epics; //список эпиков
+    protected int id; // id для всех типов задач
+    protected HistoryManager historyManager; //менеджер истории просмотров
 
     /**
      * конструктор менеджера
@@ -370,5 +370,13 @@ public class InMemoryTaskManager implements TaskManager {
      */
     private int generateId() {
         return id++;
+    }
+
+    /**
+     * геттер для поля historyManager
+     * @return ссылку на historyManager
+     */
+    public HistoryManager getHistoryManager(){
+        return this.historyManager;
     }
 }

@@ -25,4 +25,11 @@ public class Epic extends Task {
     public void deleteSubtask(Integer subtaskId) {
             subtaskIds.remove(subtaskId);
     } //удаление одного сабтаска из эпика
+
+    @Override
+    public String toString() {
+        String epicAsString = String.join(",",id.toString(),TaskType.EPIC.toString(),name,
+                status.toString(),description);
+        return epicAsString;
+    }
 }

@@ -19,4 +19,11 @@ public class Subtask extends Task {
     public Integer getEpicId() {
         return epicId;
     }
+
+    @Override
+    public String toString() {
+        String subtaskAsString = String.join(",",id.toString(),TaskType.SUBTASK.toString(),
+                name,status.toString(),description,epicId.toString());
+        return subtaskAsString;
+    }
 }
