@@ -5,7 +5,6 @@ public class Task {
     protected String name; //название задачи
     protected String description; //описание
     protected Status status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
-    protected TaskType taskType = TaskType.TASK; // тип задачи как элемент из перечисления
 
     public Task(String name, String description, Integer id) {
         this(name, description);
@@ -51,7 +50,7 @@ public class Task {
     }
 
     public TaskType getTaskType() {
-        return taskType;
+        return TaskType.TASK;
     }
 
     @Override

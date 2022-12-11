@@ -1,8 +1,5 @@
 
-import model.*; //пакет с классами таск, сабтаск, эпик, enum Status
-import servise.*;
-
-import java.io.File;
+import service.*;
 
 public class Main {
     public static void main(String[] args) {

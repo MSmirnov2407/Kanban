@@ -1,7 +1,6 @@
 package model;
 
 public class Subtask extends Task {
-    protected TaskType taskType = TaskType.SUBTASK; // тип задачи как элемент из перечисления
 
     private Integer epicId; //эпик которому принадлежит подзадача
 
@@ -24,7 +23,7 @@ public class Subtask extends Task {
 
     @Override
     public TaskType getTaskType() {
-        return taskType;
+        return TaskType.SUBTASK;
     }
 
     @Override

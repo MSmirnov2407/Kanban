@@ -1,4 +1,4 @@
-package servise;
+package service;
 
 import model.*;
 
@@ -23,23 +23,22 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
      * Сохранение информации в файл
      */
     private void save() {
-        try (Writer fileWriter = new FileWriter(file)) { //открыли поток чтения
-            fileWriter.write("id,type,name,status,description,epic \n"); //записываем строку с называниями полей
-            for (var v : getTasks()) { //пробегаем по всем таскам
-                fileWriter.write(v.toString() + "\n"); // и выводим их в файл в виде строки
+        try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) { //открыли буфер и поток чтения
+            bufferedWriter.write("id,type,name,status,description,epic \n"); //записываем строку с называниями полей
+            for (var task : getTasks()) { //пробегаем по всем таскам
+                bufferedWriter.write(task.toString() + "\n"); // и выводим их в файл в виде строки
             }
-            for (var e : getEpics()) { //пробегаем по всем эпикам
-                fileWriter.write(e.toString() + "\n"); // и выводим их в файл в виде строки
+            for (var epic : getEpics()) { //пробегаем по всем эпикам
+                bufferedWriter.write(epic.toString() + "\n"); // и выводим их в файл в виде строки
             }
-            for (var s : getSubtasks()) { //пробегаем по всем сабтаскам
-                fileWriter.write(s.toString() + "\n"); // и выводим их в файл в виде строки
+            for (var subtask : getSubtasks()) { //пробегаем по всем сабтаскам
+                bufferedWriter.write(subtask.toString() + "\n"); // и выводим их в файл в виде строки
             }
-            fileWriter.write("\n"); //делаем отступ между задачами и историей
-            fileWriter.write(historyToString(getHistoryManager())); //сохраняем историю в файл
+            bufferedWriter.newLine(); //делаем отступ между задачами и историей
+            bufferedWriter.write(historyToString(getHistoryManager())); //сохраняем историю в файл
         } catch (IOException e) {
             throw new ManagerSaveException("Ошибка процедуры сохранения истории");
         }
-
     }
 
     /**
@@ -79,16 +78,16 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
      * @return строка с id просмотренных задач
      */
     public static String historyToString(HistoryManager manager) {
-        StringBuilder historyStringBuilder = new StringBuilder();
+        StringBuilder history = new StringBuilder();
         List<Task> historyList = manager.getHistory();
         int size = historyList.size();
         for (int i = 0; i < size; i++) {
-            historyStringBuilder.append(historyList.get(i).getId());
+            history.append(historyList.get(i).getId());
             if (i < size - 1) {
-                historyStringBuilder.append(",");
+                history.append(",");
             }
         }
-        return historyStringBuilder.toString();
+        return history.toString();
     }
 
     /**

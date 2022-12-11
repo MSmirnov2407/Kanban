@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Epic extends Task {
-    protected TaskType taskType = TaskType.EPIC; // тип задачи как элемент из перечисления
 
     private List<Integer> subtaskIds = new ArrayList<>();
     ; //список сабтасков этого эпика
@@ -31,6 +30,6 @@ public class Epic extends Task {
 
     @Override
     public TaskType getTaskType() {
-        return taskType;
+        return TaskType.EPIC;
     }
 }

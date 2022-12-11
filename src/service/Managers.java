@@ -1,7 +1,6 @@
-package servise;
+package service;
 
 import java.io.File;
-import java.nio.file.Path;
 
 public final class Managers {
     /**
