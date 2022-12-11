@@ -147,10 +147,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createTask(Task newTask) {
         if (newTask != null) {
-            int taskId = generateId(); //формируем id для таска
-            newTask.setId(taskId); //присваиваем новый id новому таску
-            tasks.put(taskId, newTask); //складываем в хешмап
-            return taskId;
+            if (newTask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
+                int taskId = generateId(); //формируем id для таска
+                newTask.setId(taskId); //присваиваем новый id новому таску
+            } else if (newTask.getId() > this.id) { //иначе сместить текущий "счетчик" id, чтобы не случилось повтора
+                this.id = newTask.getId() + 1;
+            }
+            tasks.put(newTask.getId(), newTask); //складываем в хешмап
+            return newTask.getId();
         } else {
             System.out.println("Ошибка создания задачи: получена ссылка со значением null");
             return null;
@@ -170,11 +174,15 @@ public class InMemoryTaskManager implements TaskManager {
         if (newSubtask != null) {
             Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
             if (epicId != null && epics.containsKey(epicId)) {
-                int subtaskId = generateId(); //формируем id для сабтаска
-                newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
+                if (newSubtask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
+                    int subtaskId = generateId(); //формируем id для сабтаска
+                    newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
+                } else if (newSubtask.getId() > this.id) { //иначе сместить  "счетчик" id, чтобы не случилось повтора
+                    this.id = newSubtask.getId() + 1;
+                }
                 epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
-                subtasks.put(subtaskId, newSubtask); //складываем в хешмап
-                return subtaskId;
+                subtasks.put(newSubtask.getId(), newSubtask); //складываем в хешмап
+                return newSubtask.getId();
             } else {
                 System.out.println("Ошибка создания подзадачи: недостоверное значение Id эпика");
                 return null;
@@ -194,10 +202,14 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createEpic(Epic newEpic) {
         if (newEpic != null) {
-            int epicId = generateId(); //формируем id для эпика
-            newEpic.setId(epicId); //присваиваем новый id новому эпику
-            epics.put(epicId, newEpic); //складываем в хешмап
-            return epicId;
+            if (newEpic.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
+                int epicId = generateId(); //формируем id для эпика
+                newEpic.setId(epicId); //присваиваем новый id новому эпику
+            } else if (newEpic.getId() > this.id) { //иначе сместить текущий "счетчик" id, чтобы не случилось повтора
+                this.id = newEpic.getId() + 1;
+            }
+            epics.put(newEpic.getId(), newEpic); //складываем в хешмап
+            return newEpic.getId();
         } else {
             System.out.println("Ошибка создания эпика: получена ссылка со значением null");
             return null;
@@ -374,9 +386,10 @@ public class InMemoryTaskManager implements TaskManager {
 
     /**
      * геттер для поля historyManager
+     *
      * @return ссылку на historyManager
      */
-    public HistoryManager getHistoryManager(){
+    public HistoryManager getHistoryManager() {
         return this.historyManager;
     }
 }

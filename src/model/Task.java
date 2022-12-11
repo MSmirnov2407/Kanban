@@ -5,6 +5,7 @@ public class Task {
     protected String name; //название задачи
     protected String description; //описание
     protected Status status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
+    protected TaskType taskType = TaskType.TASK; // тип задачи как элемент из перечисления
 
     public Task(String name, String description, Integer id) {
         this(name, description);
@@ -49,9 +50,13 @@ public class Task {
         this.status = status;
     }
 
+    public TaskType getTaskType() {
+        return taskType;
+    }
+
     @Override
     public String toString() {
-        String taskAsString = String.join(",", id.toString(), TaskType.TASK.toString(), name,
+        String taskAsString = String.join(",", id.toString(), getTaskType().toString(), name,
                 status.toString(), description);
         return taskAsString;
     }
