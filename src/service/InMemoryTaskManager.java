@@ -265,11 +265,16 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void updateEpic(Epic updatedEpic) {
-        Integer updatedEpicId = updatedEpic.getId(); // сохранили в переменную id переданного эпика
-        if (updatedEpic != null && epics.containsKey(updatedEpicId)) {
-            epics.put(updatedEpicId, updatedEpic); //добавляем обновленную задачу в список, заменяя прежний
+        if (updatedEpic != null) {
+            Integer updatedEpicId = updatedEpic.getId(); // сохранили в переменную id переданного эпика
+            if (updatedEpic != null && epics.containsKey(updatedEpicId)) {
+                epics.put(updatedEpicId, updatedEpic); //добавляем обновленную задачу в список, заменяя прежний
+            } else {
+                System.out.println("Невозможно обновить эпик'!");
+            }
         } else {
-            System.out.println("Невозможно обновить эпик'!");
+            System.out.println("Невозможно обновить эпик. передан null!");
+
         }
     }
 
@@ -280,8 +285,10 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void deleteTaskById(Integer id) {
-        tasks.remove(id);
-        historyManager.remove(id); // удаляем таск из истории просмотров
+        if (id != null) {
+            tasks.remove(id);
+            historyManager.remove(id); // удаляем таск из истории просмотров
+        }
     }
 
     /**

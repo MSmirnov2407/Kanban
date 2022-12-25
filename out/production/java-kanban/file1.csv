@@ -1,5 +1,6 @@
 id,type,name,status,description,epic 
-0,TASK,Посмотреть фильм,NEW,Персонаж (2006 г)
-6,EPIC,Закрыть сессию,NEW,первая сессия первого курса
+1,TASK,Task1,NEW,Task description1
+3,EPIC,Epic1,NEW,Epic description1
+5,SUBTASK,Subtask1,NEW,Subtask description1,3
+6,SUBTASK,Subtask2,NEW,Subtask description2,3
 
-0,6

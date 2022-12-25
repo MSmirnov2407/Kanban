@@ -20,7 +20,7 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     /**
-     * Сохранение информации в файл
+     * Сохранение всей информации из менеджера (таски,эпики, сабтаски, стория) в файл
      */
     private void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) { //открыли буфер и поток чтения
