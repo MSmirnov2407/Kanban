@@ -3,6 +3,7 @@ package service;
 import model.*;
 
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
      */
     private void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) { //открыли буфер и поток чтения
-            bufferedWriter.write("id,type,name,status,description,epic \n"); //записываем строку с называниями полей
+            /*записываем строку с называниями полей*/
+            bufferedWriter.write("id,type,name,status,description,startTime, duration, epic \n");
             for (var task : getTasks()) { //пробегаем по всем таскам
                 bufferedWriter.write(task.toString() + "\n"); // и выводим их в файл в виде строки
             }
@@ -50,20 +52,23 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
      */
     public Task fromString(String value) {
         String[] data = value.split(","); // делим строку на части. разделитель - запятая
-        //0-id, 1 - тип, 2 - название, 3 - статус, 4 - описание [5]-epicId
+        //0-id, 1 - тип, 2 - название, 3 - статус, 4 - описание, 5 - startTime, 6 - duration, [7]-epicId
         switch (TaskType.valueOf(data[1])) { // в зависимости от типа задачи создаем нужный объект
             case TASK:
-                Task task = new Task(data[2], data[4], Integer.valueOf(data[0])); //создаем новый объект таска
+                Task task = new Task(data[2], data[4], LocalDateTime.parse(data[5]),
+                        Long.valueOf(data[6]), Integer.valueOf(data[0])); //создаем новый объект таска
                 task.setStatus(Status.valueOf(data[3])); //меняем статус на статус из файла
                 createTask(task);
                 return task;
             case EPIC:
-                Epic epic = new Epic(data[2], data[4], Integer.valueOf(data[0])); //создаем новый объект эпика
+                Epic epic = new Epic(data[2], data[4], LocalDateTime.parse(data[5]),
+                        Long.valueOf(data[6]), Integer.valueOf(data[0])); //создаем новый объект эпика
                 epic.setStatus(Status.valueOf(data[3]));//меняем статус на статус из файла
                 createEpic(epic);
                 return epic;
             case SUBTASK:
-                Subtask subtask = new Subtask(data[2], data[4], Integer.valueOf(data[5]), Integer.valueOf(data[0]));
+                Subtask subtask = new Subtask(data[2], data[4], Integer.valueOf(data[7]), LocalDateTime.parse(data[5]),
+                        Long.valueOf(data[6]), Integer.valueOf(data[0]));
                 subtask.setStatus(Status.valueOf(data[3])); //меняем статус на статус из файла
                 createSubtask(subtask);
                 return subtask;
@@ -181,6 +186,8 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
         manager.getSubtaskById(3);
         manager.getSubtaskById(4);
         System.out.println("ИСТОРИЯ 2: " + manager.getHistory());
+        System.out.println("ИСТОРИЯ 2 prior: " + manager.getPrioritizedTasks());
+
         /*создание нового менеджера по данным из файла*/
         FileBackedTasksManager fileBackedTasksManager = FileBackedTasksManager.loadFromFile(file);
         System.out.println("file_tasks: " + fileBackedTasksManager.getTasks());

@@ -1,3 +1,5 @@
+import model.Epic;
+import model.Subtask;
 import model.Task;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksManager> {
+
+    File file; // переменная для объекта файла истории
+
     @Override
     @BeforeEach
     public void beforeEach() {
@@ -26,7 +31,12 @@ public class FileBackedTasksManagerTest extends TaskManagerTest<FileBackedTasksM
         }
         file = new File("src/file1.csv");
         manager = Managers.getFileBackedTaskManager(file); //создаем объект менеджера
-
+        task1 = new Task("Task1", "Task description1", 1);
+        task2 = new Task("Task2", "Task description2", 2);
+        epic1 = new Epic("Epic1", "Epic description1", 3);
+        epic2 = new Epic("Epic2", "Epic description2", 4);
+        subtask1 = new Subtask("Subtask1", "Subtask description1", 3, 5);
+        subtask2 = new Subtask("Subtask2", "Subtask description2", 3, 6);
     }
 
     /**

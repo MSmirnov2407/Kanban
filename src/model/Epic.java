@@ -12,15 +12,34 @@ public class Epic extends Task {
 
     public Epic(String name, String description) {
         super(name, description);
-        endTime = LocalDateTime.now(); //начальное присвоение переменных, чтобы не было null
-        startTime = endTime;
+        endTime = startTime;
     } //конструктор
 
     public Epic(String name, String description, Integer id) {
-        super(name, description, id);
-        endTime = LocalDateTime.now(); //начальное присвоение переменных, чтобы не было null
-        startTime = endTime;
+        this(name, description);
+        this.id = id;
+    }
+    public Epic(String name, String description, LocalDateTime startTime, long duration) {
+        super(name, description, startTime, duration);
+        endTime = startTime.plusMinutes(duration);
     } //конструктор
+
+    public Epic(String name, String description, LocalDateTime startTime, long duration, Integer id) {
+        this(name, description, startTime, duration);
+        this.id = id;
+    }
+
+    public void setEndTime( LocalDateTime endTime){
+        this.endTime = endTime;
+    }
+
+    public void setDuration( long duration){
+        this.duration = duration;
+    }
+
+    public long getDuration(){
+        return this.duration ;
+    }
 
     public List<Integer> getSubtaskIds() {
         return subtaskIds;

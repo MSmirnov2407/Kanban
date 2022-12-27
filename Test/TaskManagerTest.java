@@ -10,7 +10,9 @@ import service.Managers;
 import model.Status;
 
 import java.io.File;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -18,28 +20,23 @@ import static org.junit.jupiter.api.Assertions.*;
 abstract class TaskManagerTest<T extends TaskManager> {
 
     T manager; //ссылочная переменная для менеджера
-    File file; // переменная для объекта файла истории
-    /*Создание подопытных тасков, эпиков, сабтасков. Эти объекты будут использоваться в тестах*/
-    public static Task task1;
-    public static Task task2;
-    public static Epic epic1;
-    public static Epic epic2;
-    public static Subtask subtask1;
-    public static Subtask subtask2;
+    public Task task1;
+    public Task task2;
+    public Epic epic1;
+    public Epic epic2;
+    public Subtask subtask1;
+    public Subtask subtask2;
 
-    @BeforeAll
-    public static void beforeAll() {
+    @BeforeEach
+    public void beforeEach() {
+        manager = (T) Managers.getDefault(); //создаем объект менеджера
+        /*Создание подопытных тасков, эпиков, сабтасков. Эти объекты будут использоваться в тестах*/
         task1 = new Task("Task1", "Task description1", 1);
         task2 = new Task("Task2", "Task description2", 2);
         epic1 = new Epic("Epic1", "Epic description1", 3);
         epic2 = new Epic("Epic2", "Epic description2", 4);
         subtask1 = new Subtask("Subtask1", "Subtask description1", 3, 5);
         subtask2 = new Subtask("Subtask2", "Subtask description2", 3, 6);
-    }
-
-    @BeforeEach
-    public void beforeEach() {
-        manager = (T) Managers.getDefault(); //создаем объект менеджера
     }
 
     /**
@@ -169,6 +166,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
     @Test
     public void deleteAllSubtasksIfGoodSubtasks() {
         manager.createEpic(epic1);  //добавим в менеджер эпик и связанные с ним сабтаски
+
         Integer subtaskId1 = manager.createSubtask(subtask1);
         Integer subtaskId2 = manager.createSubtask(subtask2);
 
@@ -598,5 +596,81 @@ abstract class TaskManagerTest<T extends TaskManager> {
 
         assertFalse(manager.getSubtasks().isEmpty());
         assertFalse(manager.getEpics().isEmpty());
+    }
+
+    /**
+     * проверка сортировки задач по времени начала задачи(подзадачи).
+     */
+    @Test
+    public void getPrioritizedTasksIfGoodTasks() {
+        /*добавляем таски с указанием времени начала*/
+        Integer taskId1 = manager.createTask(new Task("Task1", "Description1",
+                LocalDateTime.parse("2022-12-29T12:12:12.1111"), 8, 0));
+        Integer taskId2 = manager.createTask(new Task("Task2", "Description2",
+                LocalDateTime.parse("2022-12-31T13:10:11.2222"), 10, 1));
+        Integer taskId3 = manager.createTask(new Task("Task1", "Description1",
+                LocalDateTime.parse("2022-12-30T14:11:12.3333"), 9, 2));
+        /*добавляем эпик и его сабтаск с указанием времени начала*/
+        Integer epicId = manager.createEpic(new Epic("Epic1", "descr1",
+                LocalDateTime.parse("2022-12-10T00:00:00.0000"), 22, 3 ));
+        Integer subtaskId = manager.createSubtask(new Subtask("Subtask1", "descr1S", epicId,
+                LocalDateTime.parse("2023-01-01T01:01:01.0001"), 1, 4 ));
+        /*создаем список, в который вручную добавляем задачи в порядке приоритета (по времени начала)*/
+        List<Task> manualPrioritizedList = new ArrayList<Task>();
+        manualPrioritizedList.add(manager.getTaskById(taskId1));
+        manualPrioritizedList.add(manager.getTaskById(taskId3));
+        manualPrioritizedList.add(manager.getTaskById(taskId2));
+        manualPrioritizedList.add(manager.getSubtaskById(subtaskId));
+        /*сравниваем ручной список с автоматичекски созданным*/
+        assertTrue(manualPrioritizedList.equals(manager.getPrioritizedTasks()));
+    }
+
+    /**
+     * проверка сортировки задач с пустым спиком задач(подзадач).
+     */
+    @Test
+    public void getPrioritizedTasksWithoutTasks() {
+        assertTrue(manager.getPrioritizedTasks().isEmpty());
+    }
+
+    /**
+     * проверка создания задач с одинаковым временем.
+     * Последующие добавления задач с повторющимся временем не должно происходить
+     */
+    @Test
+    public void createSameTimeTask() {
+        /*добавляем таски с указанием времени начала*/
+        Integer taskId1 = manager.createTask(new Task("Task1", "Description1",
+                LocalDateTime.parse("2022-12-29T12:12:12.1111"), 8, 0));
+        Integer taskId2 = manager.createTask(new Task("Task2", "Description2",
+                LocalDateTime.parse("2022-12-29T12:12:12.1111"), 10, 1));
+
+        /*создаем список, в который вручную добавляем задачу, которая должна сохраниться в getPrioritizedTasks
+        * как первая добавленная*/
+        List<Task> manualPrioritizedList = new ArrayList<Task>();
+        manualPrioritizedList.add(manager.getTaskById(taskId1));
+        /*сравниваем ручной список с автоматичекски созданным*/
+        assertTrue(manualPrioritizedList.equals(manager.getPrioritizedTasks()));
+    }
+
+    /**
+     * проверка создания задач с наложением по времени на другую задачу.
+     * Создание такой задачи не должно быть выполнено
+     */
+    @Test
+    public void createTaskWithTimeOverlay() {
+        /*добавляем таски с указанием времени начала*/
+        Integer taskId1 = manager.createTask(new Task("Task1", "Description1",
+                LocalDateTime.parse("2022-12-29T12:12:12.1111"), 8, 0));
+        Integer taskId2 = manager.createTask(new Task("Task2", "Description2",
+                LocalDateTime.parse("2022-12-29T12:12:10.1111"), 10, 1));
+
+        /*создаем список, в который вручную добавляем задачу, которая должна сохраниться в getPrioritizedTasks
+         * как первая добавленная без обнаружения пересечения. Вторая задача не должна быть ждобавлена в менеджер*/
+        List<Task> manualPrioritizedList = new ArrayList<Task>();
+        manualPrioritizedList.add(manager.getTaskById(taskId1));
+        /*сравниваем ручной список с автоматичекски созданным*/
+        assertTrue(manualPrioritizedList.equals(manager.getPrioritizedTasks()));
+        assertNull(taskId2);
     }
 }

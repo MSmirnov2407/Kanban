@@ -1,5 +1,7 @@
 package model;
 
+import java.time.LocalDateTime;
+
 public class Subtask extends Task {
 
     private Integer epicId; //эпик которому принадлежит подзадача
@@ -10,6 +12,17 @@ public class Subtask extends Task {
 
     public Subtask(String name, String description, Integer epicId, Integer id) {
         super(name, description, id);
+        this.epicId = epicId;
+
+    } //конструктор
+
+    public Subtask(String name, String description, Integer epicId, LocalDateTime startTime, long duration) {
+        super(name, description, startTime, duration, null);
+        this.epicId = epicId;
+    } //конструктор
+
+    public Subtask(String name, String description, Integer epicId, LocalDateTime startTime, long duration, Integer id) {
+        super(name, description, startTime, duration, id);
         this.epicId = epicId;
     } //конструктор
 
@@ -29,7 +42,7 @@ public class Subtask extends Task {
     @Override
     public String toString() {
         String subtaskAsString = String.join(",", id.toString(), getTaskType().toString(),
-                name, status.toString(), description, epicId.toString());
+                name, status.toString(), description, startTime.toString(), Long.toString(duration), epicId.toString());
         return subtaskAsString;
     }
 }

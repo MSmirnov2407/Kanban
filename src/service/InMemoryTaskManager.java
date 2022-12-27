@@ -5,10 +5,10 @@ import model.Status;
 import model.Subtask;
 import model.Task;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 public class InMemoryTaskManager implements TaskManager {
     protected Map<Integer, Task> tasks;   //список задач
@@ -17,6 +17,8 @@ public class InMemoryTaskManager implements TaskManager {
     protected int id; // id для всех типов задач
     protected HistoryManager historyManager; //менеджер истории просмотров
 
+    protected TreeSet<Task> prioritizedTasks; //treeSet для хранения тасков и сабтасков отсортированными по startTime
+
     /**
      * конструктор менеджера
      */
@@ -24,7 +26,20 @@ public class InMemoryTaskManager implements TaskManager {
         tasks = new HashMap<>();
         subtasks = new HashMap<>();
         epics = new HashMap<>();
-        historyManager = Managers.getDefaultHistory(); //создаем менеджер историй по усолчанию
+        historyManager = Managers.getDefaultHistory(); //создаем менеджер историй по умолчанию
+        prioritizedTasks = new TreeSet<>(new Comparator<Task>() {
+            @Override
+            public int compare(Task o1, Task o2) {
+                //если одна задача начинается позже доугой,то она по порядку выполнения стоит "правее", т.е.она "больше"
+                if (o1.getStartTime().isAfter(o2.getStartTime())) {
+                    return 1;
+                } else if (o1.getStartTime().isBefore(o2.getStartTime())) {
+                    return -1;
+                } else {
+                    return 0;
+                }
+            }
+        });
     }
 
     /**
@@ -63,6 +78,7 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public void deleteAllTasks() {
         for (var taskId : tasks.keySet()) { //удаляем из истории просмотров все таски
+            prioritizedTasks.remove(getTaskById(taskId)); //также удаляем из сортированного по приоритетам трисета.
             historyManager.remove(taskId);
         }
         tasks.clear();
@@ -76,8 +92,10 @@ public class InMemoryTaskManager implements TaskManager {
         for (Epic epic : epics.values()) { //для каждого эпика в общем списке эпиков
             epic.getSubtaskIds().clear(); //очищаем список подзадач
             updateEpicStatus(epic.getId()); //обновляем статус эпика (он станет NEW)
+            updateEpicTime(epic.getId()); //пересчитываем временныве рамки эпика
         }
         for (var subtaskId : subtasks.keySet()) { //удаляем из истории просмотров все сабтаски
+            prioritizedTasks.remove(getSubtaskById(subtaskId)); //также удаляем из сортированного по приоритетам трисета
             historyManager.remove(subtaskId);
         }
         subtasks.clear();
@@ -93,6 +111,7 @@ public class InMemoryTaskManager implements TaskManager {
             historyManager.remove(epicId);
         }
         for (var subtaskId : subtasks.keySet()) { //удаляем из истории просмотров все сабтаски
+            prioritizedTasks.remove(getSubtaskById(subtaskId)); //также удаляем из сортированного по приоритетам трисета
             historyManager.remove(subtaskId);
         }
         epics.clear();
@@ -147,18 +166,24 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createTask(Task newTask) {
         if (newTask != null) {
-            if (newTask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
-                int taskId = generateId(); //формируем id для таска
-                newTask.setId(taskId); //присваиваем новый id новому таску
-            } else if (newTask.getId() > this.id) { //иначе сместить текущий "счетчик" id, чтобы не случилось повтора
-                this.id = newTask.getId() + 1;
+            if (!isTimeOverlay(newTask)) { //если нет наложений по времени
+                if (newTask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
+                    int taskId = generateId(); //формируем id для таска
+                    newTask.setId(taskId); //присваиваем новый id новому таску
+                } else if (newTask.getId() > this.id) { //иначе сместить текущий "счетчик" id, чтобы не случилось повтора
+                    this.id = newTask.getId() + 1;
+                }
+                tasks.put(newTask.getId(), newTask); //складываем в хешмап
+                prioritizedTasks.add(newTask); // добавили в сортированный по приоритетам (по времени начала) treeSet
+
+                return newTask.getId();
+            } else {
+                System.out.println("Ошибка создания задачи: обнаружено наложение в расписании");
             }
-            tasks.put(newTask.getId(), newTask); //складываем в хешмап
-            return newTask.getId();
         } else {
             System.out.println("Ошибка создания задачи: получена ссылка со значением null");
-            return null;
         }
+        return null;
     }
 
     /**
@@ -172,25 +197,30 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public Integer createSubtask(Subtask newSubtask) {
         if (newSubtask != null) {
-            Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
-            if (epicId != null && epics.containsKey(epicId)) {
-                if (newSubtask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
-                    int subtaskId = generateId(); //формируем id для сабтаска
-                    newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
-                } else if (newSubtask.getId() > this.id) { //иначе сместить  "счетчик" id, чтобы не случилось повтора
-                    this.id = newSubtask.getId() + 1;
+            if (!isTimeOverlay(newSubtask)) { //если нет наложений по времени
+                Integer epicId = newSubtask.getEpicId(); //сохранили значение id Эпика,к кот. привязан новый сабтаск
+                if (epicId != null && epics.containsKey(epicId)) {
+                    if (newSubtask.getId() == null) { //если получили таск с незаполненным id, то генерируем ему новый номер
+                        int subtaskId = generateId(); //формируем id для сабтаска
+                        newSubtask.setId(subtaskId); //присваиваем новый id новому сабтаску
+                    } else if (newSubtask.getId() > this.id) { //иначе сместить  "счетчик" id, чтобы не случилось повтора
+                        this.id = newSubtask.getId() + 1;
+                    }
+                    epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
+                    subtasks.put(newSubtask.getId(), newSubtask); //складываем в хешмап
+                    prioritizedTasks.add(newSubtask); // добавили в сортированный по приоритетам (по времени начала) treeSet
+                    updateEpicTime(epicId); //пересчитываем временные рамки эпика
+                    return newSubtask.getId();
+                } else {
+                    System.out.println("Ошибка создания подзадачи: недостоверное значение Id эпика");
                 }
-                epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
-                subtasks.put(newSubtask.getId(), newSubtask); //складываем в хешмап
-                return newSubtask.getId();
             } else {
-                System.out.println("Ошибка создания подзадачи: недостоверное значение Id эпика");
-                return null;
+                System.out.println("Ошибка создания задачи: обнаружено наложение в расписании");
             }
         } else {
             System.out.println("Ошибка создания подзадачи: получена ссылка со значением null");
-            return null;
         }
+        return null;
     }
 
     /**
@@ -226,7 +256,9 @@ public class InMemoryTaskManager implements TaskManager {
         if (updatedTask != null) {
             Integer updatedTaskId = updatedTask.getId(); //сохранили в переменную значение id переданного таска
             if (tasks.containsKey(updatedTaskId)) {
+                prioritizedTasks.remove(tasks.get(updatedTaskId)); //удалили старый таск из сортированного трисета
                 tasks.put(updatedTaskId, updatedTask); //добавляем обновленную задачу в список, заменяя прежнюю
+                prioritizedTasks.add(tasks.get(updatedTaskId)); //добавили обновленный таск в сортированный трисет
             } else {
                 System.out.println("Ошибка обновления задачи: не найден Таск по id");
             }
@@ -248,8 +280,11 @@ public class InMemoryTaskManager implements TaskManager {
             Integer epicId = updatedSubtask.getEpicId(); //значение id Эпика,к кот. привязан сабтаск
             Integer updatedSubtaskId = updatedSubtask.getId(); //id переданного сабтаска
             if (subtasks.containsKey(updatedSubtaskId) && epicId != null && epics.containsKey(epicId)) {
+                prioritizedTasks.remove(subtasks.get(updatedSubtaskId)); //удалили старый сабтаск из трисета
                 subtasks.put(updatedSubtaskId, updatedSubtask); //добавляем обновленную подзадачу, заменяя прежнюю
+                prioritizedTasks.add(subtasks.get(updatedSubtaskId)); //добавили новый сабтаск в трисет
                 updateEpicStatus(epicId); //вызываем метод пересчета статуса эпика
+                updateEpicTime(epicId); //пересчитываем временные рамки эпика
             } else {
                 System.out.println("Ошибка обновления подзадачи: на найден сабтаск или эпик");
             }
@@ -285,7 +320,8 @@ public class InMemoryTaskManager implements TaskManager {
      */
     @Override
     public void deleteTaskById(Integer id) {
-        if (id != null) {
+        if (tasks.containsKey(id)) {
+            prioritizedTasks.remove(tasks.get(id)); //удалили из сортированного по приоритетам трисета
             tasks.remove(id);
             historyManager.remove(id); // удаляем таск из истории просмотров
         }
@@ -305,7 +341,9 @@ public class InMemoryTaskManager implements TaskManager {
                 Epic e = epics.get(epicId);
                 e.deleteSubtask(id); // в найденном эпике удаляем подзадачу
                 updateEpicStatus(e.getId()); //обновляем статус эпика после удаления подзадачи
+                updateEpicTime(e.getId()); //пересчитываем временные рамки эпика
             }
+            prioritizedTasks.remove(subtasks.get(id)); //удалили из сортированного по приоритетам трисета
             subtasks.remove(id); //удаляем сабтакс из общего списка подзадач
             historyManager.remove(id); // удаляем сабтаск из истории просмотров
         } else {
@@ -338,6 +376,16 @@ public class InMemoryTaskManager implements TaskManager {
     @Override
     public List<Task> getHistory() {
         return historyManager.getHistory();
+    }
+
+    /**
+     * Вернуть таски и сабтаски в порядке очередности
+     *
+     * @return список тасков-сабтасков в порядке очередности
+     */
+    @Override
+    public List<Task> getPrioritizedTasks() {
+        return new ArrayList<Task>(prioritizedTasks);
     }
 
     /**
@@ -383,6 +431,31 @@ public class InMemoryTaskManager implements TaskManager {
     }
 
     /**
+     * метод пересчитывает временные рамки эпика в зависимости от рамок его сабтасков
+     *
+     * @param epicId - id эпика
+     */
+    private void updateEpicTime(Integer epicId) {
+        Epic epic = epics.get(epicId); //берем эпик по переданному id
+        if (!epic.getSubtaskIds().isEmpty()) {
+            LocalDateTime epicStartTime = LocalDateTime.MAX; //переменная для хранения времени начала эпика
+            LocalDateTime epicEndTime = LocalDateTime.MIN; //переменная для хранения времени окончания эпика
+            for (var subtaskId : epic.getSubtaskIds()) { //проходим по всем сабтаскам данного эпика
+                Subtask subtask = subtasks.get(subtaskId); //берем сабтаск по id
+                if (subtask.getStartTime().isBefore(epicStartTime)) { //если у сабтаска начало раньше, чем текущий старт
+                    epicStartTime = subtask.getStartTime(); //запоминаем новый минимум (время начала)
+                }
+                if (subtask.getEndTime().isAfter(epicEndTime)) { //если у сабтаска время конца позже, чем текущий финищ
+                    epicEndTime = subtask.getEndTime(); //запоминаем новый минимум (время начала)
+                }
+            }
+            epic.setStartTime(epicStartTime); //перезаписываем время начала эпика
+            epic.setEndTime(epicEndTime); //перезаписываем время конца эпика
+            epic.setDuration(Duration.between(epicStartTime, epicEndTime).toMinutes()); //запис. продолжительность эпика
+        }
+    }
+
+    /**
      * Генерация id для таксков/сабтасков/эпиков
      *
      * @return сгенерированный id
@@ -398,5 +471,26 @@ public class InMemoryTaskManager implements TaskManager {
      */
     public HistoryManager getHistoryManager() {
         return this.historyManager;
+    }
+
+    /**
+     * метод проверяет, есть ли пересечение веремени выполнения переданной задачи с другими задачами/подзадачами.
+     *
+     * @param newTask - проверяемый таск/сабтаск
+     * @return результат проверки наличия пересечений времени.true - есть пересечение
+     */
+    private boolean isTimeOverlay(Task newTask) {
+        for (var task : getPrioritizedTasks()) { //проходим по всем задачам/подзадачам в дереве
+            if (newTask.getStartTime().isAfter(task.getStartTime())
+                    && newTask.getStartTime().isBefore(task.getEndTime()) //если начало таска лежит внутри другого таска
+                    || newTask.getEndTime().isAfter(task.getStartTime())
+                    && newTask.getEndTime().isBefore(task.getEndTime()) //или конец таска лежит внутри другого таска
+                    || newTask.getStartTime().isBefore(task.getStartTime())
+                    && newTask.getEndTime().isAfter(task.getEndTime())) { //или таск полностью соджержит другой таск
+                return true;
+            }
+        }
+
+        return false;
     }
 }

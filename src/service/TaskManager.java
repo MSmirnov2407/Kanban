@@ -144,4 +144,11 @@ public interface TaskManager {
      * @return список Тасков/подтасков/эпиков
      */
     List<Task> getHistory();
+
+    /**
+     * Вернуть таски и сабтаски в порядке очередности
+     *
+     * @return список тасков-сабтасков в порядке очередности
+     */
+    List<Task> getPrioritizedTasks();
 }
