@@ -9,9 +9,6 @@ public class Task {
     protected String description; //описание
     protected Status status; //статус NEW - новая, IN_PROGRESS - в процессе, DONE - завершена
     protected long duration; //продолжительности задачи в минутах
-
-
-
     protected LocalDateTime startTime; //время начала выполнения задачи
 
     public Task(String name, String description) {
@@ -32,12 +29,11 @@ public class Task {
         this.startTime = startTime;
         this.duration = duration;
     }
+
     public Task(String name, String description, LocalDateTime startTime, long duration, Integer id) {
-        this(name, description,startTime, duration);
+        this(name, description, startTime, duration);
         this.id = id;
     }
-
-
 
     public Integer getId() {
         return id;
@@ -75,7 +71,11 @@ public class Task {
         return TaskType.TASK;
     }
 
-    public void setStartTime(LocalDateTime startTime){
+    public long getDuration(){
+        return duration;
+    }
+
+    public void setStartTime(LocalDateTime startTime) {
         this.startTime = startTime;
     }
 
@@ -83,12 +83,10 @@ public class Task {
         return startTime;
     }
 
-
-    public LocalDateTime getEndTime(){
-      LocalDateTime endTime = startTime.plusMinutes(duration);
-      return endTime;
+    public LocalDateTime getEndTime() {
+        LocalDateTime endTime = startTime.plusMinutes(duration);
+        return endTime;
     }
-
 
     @Override
     public String toString() {
@@ -105,5 +103,10 @@ public class Task {
         return getId().equals(task.getId()) && getName().equals(task.getName())
                 && getDescription().equals(task.getDescription()) && getStatus() == task.getStatus()
                 && duration == task.duration && startTime.equals(task.startTime);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, description, status, duration, startTime);
     }
 }

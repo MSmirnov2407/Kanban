@@ -615,6 +615,7 @@ abstract class TaskManagerTest<T extends TaskManager> {
                 LocalDateTime.parse("2022-12-10T00:00:00.0000"), 22, 3 ));
         Integer subtaskId = manager.createSubtask(new Subtask("Subtask1", "descr1S", epicId,
                 LocalDateTime.parse("2023-01-01T01:01:01.0001"), 1, 4 ));
+
         /*создаем список, в который вручную добавляем задачи в порядке приоритета (по времени начала)*/
         List<Task> manualPrioritizedList = new ArrayList<Task>();
         manualPrioritizedList.add(manager.getTaskById(taskId1));

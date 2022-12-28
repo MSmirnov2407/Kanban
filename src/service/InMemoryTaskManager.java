@@ -94,10 +94,7 @@ public class InMemoryTaskManager implements TaskManager {
             updateEpicStatus(epic.getId()); //обновляем статус эпика (он станет NEW)
             updateEpicTime(epic.getId()); //пересчитываем временныве рамки эпика
         }
-        for (var subtaskId : subtasks.keySet()) { //удаляем из истории просмотров все сабтаски
-            prioritizedTasks.remove(getSubtaskById(subtaskId)); //также удаляем из сортированного по приоритетам трисета
-            historyManager.remove(subtaskId);
-        }
+        removeSubtaskFromHistoryAndPriority();//удаляем из истории просмотров и из сортированного по приоритетам трисета
         subtasks.clear();
     }
 
@@ -110,10 +107,7 @@ public class InMemoryTaskManager implements TaskManager {
         for (var epicId : epics.keySet()) { //удаляем из истории просмотров все эпики
             historyManager.remove(epicId);
         }
-        for (var subtaskId : subtasks.keySet()) { //удаляем из истории просмотров все сабтаски
-            prioritizedTasks.remove(getSubtaskById(subtaskId)); //также удаляем из сортированного по приоритетам трисета
-            historyManager.remove(subtaskId);
-        }
+        removeSubtaskFromHistoryAndPriority();//удаляем из истории просмотров и из сортированного по приоритетам трисета
         epics.clear();
         subtasks.clear(); //сабтаски не существуют без эпиков
     }
@@ -209,6 +203,7 @@ public class InMemoryTaskManager implements TaskManager {
                     epics.get(epicId).addSubtask(newSubtask); //сохранили в эпике инфо о его новой подзадаче
                     subtasks.put(newSubtask.getId(), newSubtask); //складываем в хешмап
                     prioritizedTasks.add(newSubtask); // добавили в сортированный по приоритетам (по времени начала) treeSet
+                    updateEpicStatus(epicId); //обновляем статус эпика
                     updateEpicTime(epicId); //пересчитываем временные рамки эпика
                     return newSubtask.getId();
                 } else {
@@ -445,13 +440,14 @@ public class InMemoryTaskManager implements TaskManager {
                 if (subtask.getStartTime().isBefore(epicStartTime)) { //если у сабтаска начало раньше, чем текущий старт
                     epicStartTime = subtask.getStartTime(); //запоминаем новый минимум (время начала)
                 }
-                if (subtask.getEndTime().isAfter(epicEndTime)) { //если у сабтаска время конца позже, чем текущий финищ
+                if (subtask.getEndTime().isAfter(epicEndTime)) { //если у сабтаска время конца позже, чем текущий финиш
                     epicEndTime = subtask.getEndTime(); //запоминаем новый минимум (время начала)
                 }
+                /*увеличиваем продолжительность эпика на продолжительность текушего сабтаска*/
+                epic.setDuration(epic.getDuration() + subtask.getDuration());
             }
             epic.setStartTime(epicStartTime); //перезаписываем время начала эпика
             epic.setEndTime(epicEndTime); //перезаписываем время конца эпика
-            epic.setDuration(Duration.between(epicStartTime, epicEndTime).toMinutes()); //запис. продолжительность эпика
         }
     }
 
@@ -490,7 +486,17 @@ public class InMemoryTaskManager implements TaskManager {
                 return true;
             }
         }
-
         return false;
+    }
+
+    /**
+     * удаление сабтасков из истории просмотров задач
+     * и из отсортированного по времени старта трисета
+     */
+    private void removeSubtaskFromHistoryAndPriority(){
+        for (var subtaskId : subtasks.keySet()) { //удаляем из истории просмотров все сабтаски
+            prioritizedTasks.remove(getSubtaskById(subtaskId)); //также удаляем из сортированного по приоритетам трисета
+            historyManager.remove(subtaskId);
+        }
     }
 }
