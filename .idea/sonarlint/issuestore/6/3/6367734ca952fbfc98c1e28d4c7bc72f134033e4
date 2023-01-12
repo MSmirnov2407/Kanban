@@ -1,0 +1,26 @@
+
+u
+java:S2293ÿ"YReplace the type specification in this constructor call with the diamond operator ("<>").(áğÑ«şÿÿÿÿ
+>
+java:S1604"(Make this anonymous inner class a lambda(‚¡Èç
+N
+java:S2589¬"7Remove this expression which always evaluates to "true"(¢íõ­
+O	java:S106¯"9Replace this use of System.out or System.err by a logger.(×ÛÃ­
+T	java:S106²"9Replace this use of System.out or System.err by a logger.(üØò®øÿÿÿÿ
+T	java:S106Ò"9Replace this use of System.out or System.err by a logger.(ÁÔ‘¨ÿÿÿÿÿ
+O	java:S106Õ"9Replace this use of System.out or System.err by a logger.(×ÛÃ­
+O	java:S106Ø"9Replace this use of System.out or System.err by a logger.(Íµ¶
+T	java:S106ï"9Replace this use of System.out or System.err by a logger.(¥—íûÿÿÿÿ
+O	java:S106‚"9Replace this use of System.out or System.err by a logger.(ÎÃß­
+T	java:S106…"9Replace this use of System.out or System.err by a logger.(•ğ˜“ûÿÿÿÿ
+O	java:S106œ"9Replace this use of System.out or System.err by a logger.(Ş¼’è
+O	java:S106Ÿ"9Replace this use of System.out or System.err by a logger.(»‹˜Ã
+O	java:S106¯"9Replace this use of System.out or System.err by a logger.(¦”«
+T	java:S106²"9Replace this use of System.out or System.err by a logger.(€¿ºƒúÿÿÿÿ
+T	java:S106Ù"9Replace this use of System.out or System.err by a logger.(„µÒûÿÿÿÿ
+T	java:S106"9Replace this use of System.out or System.err by a logger.(šåÌÜÿÿÿÿÿ
+R	java:S125©"<This block of commented-out lines of code should be removed.(„úğ•
+J
+java:S1128"/Remove this unused import 'java.time.Duration'.(ëá¯‰üÿÿÿÿ
+K
+java:S1128	"0Remove this unused import 'java.time.LocalDate'.(›‘¬èıÿÿÿÿ

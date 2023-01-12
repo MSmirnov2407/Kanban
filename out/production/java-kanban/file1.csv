@@ -1,6 +1,5 @@
 id,type,name,status,description,startTime, duration, epic 
-1,TASK,Task1,NEW,Task description1,2022-12-28T21:56:44.050307,0
-3,EPIC,Epic1,NEW,Epic description1,2022-12-28T21:56:44.050437,0
-5,SUBTASK,Subtask1,NEW,Subtask description1,2022-12-28T21:56:44.050437,0,3
-6,SUBTASK,Subtask2,NEW,Subtask description2,2022-12-28T21:56:44.050442,0,3
+0,TASK,Посмотреть фильм,NEW,Персонаж (2006 г),2023-01-11T21:09:08.796435500,0
+6,EPIC,Закрыть сессию,NEW,первая сессия первого курса,2023-01-11T21:09:08.827514700,0
 
+0,6
