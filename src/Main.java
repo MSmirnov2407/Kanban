@@ -10,7 +10,7 @@ import java.io.IOException;
 public class Main {
     public static void main(String[] args) throws IOException, InterruptedException {
         new KVServer().start(); //создаем и запускаем сервер-хранилище
-
+//new HttpTaskServer().start();
         TaskManager manager = new HttpTaskManager("http://localhost:8078");
         /*создаем две задачи*/
         manager.createTask(new Task("Посмотреть фильм", "Персонаж (2006 г)"));
@@ -25,9 +25,12 @@ public class Main {
 
         manager.getTaskById(1);
         manager.getTaskById(0);
-        System.out.println("origin history"+manager.getHistory());
-
+        manager.getSubtaskById(5);
+        System.out.println("history" + manager.getHistory());
+        /*загрузим состояние менеджера из сервера-хранилища*/
         HttpTaskManager manager2 = new HttpTaskManager("http://localhost:8078");
         manager2.loadFromServer();
+        System.out.println("loaded history" + manager2.getHistory());
+
     }
 }

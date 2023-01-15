@@ -1,8 +1,10 @@
 
 0
 java:S1220""Move this file to a named package.
-™
-java:S1130"wRemove the declaration of thrown exception 'java.lang.InterruptedException', as it cannot be thrown from method's body.(àÒþüøÿÿÿÿ8ÊØü—Û0
-Z	java:S106"9Replace this use of System.out or System.err by a logger.(‡é‚ðýÿÿÿÿ8ÎØü—Û0
-`
-java:S1128"CRemove this unused import 'javax.xml.crypto.dsig.keyinfo.KeyValue'.(¤šœê8Š ®”Û0
+’
+java:S1130"wRemove the declaration of thrown exception 'java.lang.InterruptedException', as it cannot be thrown from method's body.(àÒþüøÿÿÿÿ
+V	java:S125"<This block of commented-out lines of code should be removed.(ÈïÛ•þÿÿÿÿ
+N	java:S106"9Replace this use of System.out or System.err by a logger.(ÈÛªñ
+N	java:S106!"9Replace this use of System.out or System.err by a logger.(×¤”ô
+Y
+java:S1128"CRemove this unused import 'javax.xml.crypto.dsig.keyinfo.KeyValue'.(¤šœê
