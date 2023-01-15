@@ -1,11 +1,9 @@
 import model.Task;
-import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.*;
+import service.KVServer;
 import service.TaskManager;
 import model.Epic;
 import model.Subtask;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import service.Managers;
 import model.Status;
 
@@ -26,6 +24,21 @@ abstract class TaskManagerTest<T extends TaskManager> {
     public Epic epic2;
     public Subtask subtask1;
     public Subtask subtask2;
+    private static KVServer kvServer; //http-сервер-хранилище состояния менеджера
+    @BeforeAll
+    public static void beforeAll(){
+        try{
+            kvServer = new KVServer();
+            kvServer.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    @AfterAll
+    public static void afterAll(){
+        kvServer.stop();
+    }
 
     @BeforeEach
     public void beforeEach() {

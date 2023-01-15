@@ -19,6 +19,8 @@ S
 java:S4973¿"<Strings and Boxed types should be compared using "equals()".(½”¯¹
 K
 java:S1191"5Use classes from the Java API instead of Sun classes.(üÕÙä
+M
+java:S1172 "+Remove this unused method parameter "args".(åà´Íûÿÿÿÿ8ÄØö—Û0
 M	java:S106B"9Replace this use of System.out or System.err by a logger.(Ô£Ë
 N	java:S106C"9Replace this use of System.out or System.err by a logger.(ÅÔ²ß
 S	java:S106K"9Replace this use of System.out or System.err by a logger.(—ı„±ùÿÿÿÿ

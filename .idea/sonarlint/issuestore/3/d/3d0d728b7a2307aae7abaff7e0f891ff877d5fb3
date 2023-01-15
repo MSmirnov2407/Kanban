@@ -1,0 +1,21 @@
+
+K
+java:S1191"5Use classes from the Java API instead of Sun classes.(üÕÙä
+S	java:S106 "9Replace this use of System.out or System.err by a logger.(‰çÊºøÿÿÿÿ
+N	java:S106""9Replace this use of System.out or System.err by a logger.(€Ã˜Ï
+N	java:S106)"9Replace this use of System.out or System.err by a logger.(¼´¡œ
+N	java:S106."9Replace this use of System.out or System.err by a logger.(›ö£é
+M	java:S1063"9Replace this use of System.out or System.err by a logger.(ÈºÊZ
+N	java:S1065"9Replace this use of System.out or System.err by a logger.(”Ù¥†
+M	java:S106?"9Replace this use of System.out or System.err by a logger.(û€’^
+N	java:S106A"9Replace this use of System.out or System.err by a logger.(€Ã˜Ï
+S	java:S106H"9Replace this use of System.out or System.err by a logger.(ĞÕ±Ñùÿÿÿÿ
+S	java:S106N"9Replace this use of System.out or System.err by a logger.(Ÿ…ëÎşÿÿÿÿ
+N	java:S106S"9Replace this use of System.out or System.err by a logger.(ÕÊ¼ã
+S	java:S106V"9Replace this use of System.out or System.err by a logger.(—â„ùÿÿÿÿ
+S	java:S106`"9Replace this use of System.out or System.err by a logger.(‹¤şÿÿÿÿ
+N	java:S106d"9Replace this use of System.out or System.err by a logger.(Å—ô©
+S	java:S106m"9Replace this use of System.out or System.err by a logger.(ãî¼şúÿÿÿÿ
+S	java:S106n"9Replace this use of System.out or System.err by a logger.(³Ú™—úÿÿÿÿ
+U	java:S106o"9Replace this use of System.out or System.err by a logger.(ÍÛŠ¡8Ò¨·€Û0
+U	java:S106s"9Replace this use of System.out or System.err by a logger.(Ëñƒæ8óí¹“Û0

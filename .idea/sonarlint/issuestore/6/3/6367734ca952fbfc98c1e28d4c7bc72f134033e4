@@ -18,8 +18,10 @@ O	java:S106Ÿ"9Replace this use of System.out or System.err by a logger.(»‹˜Ã
 O	java:S106¯"9Replace this use of System.out or System.err by a logger.(¦”«
 T	java:S106²"9Replace this use of System.out or System.err by a logger.(€¿ºƒúÿÿÿÿ
 T	java:S106Ù"9Replace this use of System.out or System.err by a logger.(„µÒûÿÿÿÿ
-T	java:S106"9Replace this use of System.out or System.err by a logger.(šåÌÜÿÿÿÿÿ
-R	java:S125©"<This block of commented-out lines of code should be removed.(„úğ•
+i
+java:S3776‡"RRefactor this method to reduce its Cognitive Complexity from 18 to the 15 allowed.(í›ú£
+O	java:S106"9Replace this use of System.out or System.err by a logger.(Ë²ğÉ
+R	java:S125­"<This block of commented-out lines of code should be removed.(„úğ•
 J
 java:S1128"/Remove this unused import 'java.time.Duration'.(ëá¯‰üÿÿÿÿ
 K

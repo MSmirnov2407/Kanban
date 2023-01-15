@@ -1,7 +1,10 @@
 import model.Epic;
 import model.Subtask;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import service.KVServer;
 import service.Managers;
 import service.TaskManager;
 import model.Status;
@@ -13,9 +16,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class EpicStatusTest {
     private static TaskManager manager; //ссылочная переменная для менеджера
     private static Integer epicId; //ссылочная переменная для хранения id эпика
+private static KVServer kvServer; //http-сервер-хранилище состояния менеджера
+    @BeforeAll
+    public static void beforeAll(){
+        try{
+            kvServer = new KVServer();
+            kvServer.start();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
 
+    @AfterAll
+    public static void afterAll(){
+        kvServer.stop();
+    }
     @BeforeEach
-    public void beforeAll() {
+    public void beforeEach() {
         manager = Managers.getDefault(); //создаем объект менеджера
         epicId = manager.createEpic(new Epic("эпик-1 - имя", "эпик-1 - описание")); //создали эпик
     }

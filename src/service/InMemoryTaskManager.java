@@ -395,7 +395,7 @@ public class InMemoryTaskManager implements TaskManager {
         boolean hasDoneSubtasks = false; // ... DONE
 
         if (!epics.containsKey(epicId)) { //если передан ошибочный ключ, выходим из метода
-            System.out.println("Manager.updateEpicStatus: нет эпика с таким ключем");
+            System.out.println("Manager.updateEpicStatus: нет эпика с таким ключом");
             return;
         }
         if (epic.getSubtaskIds().isEmpty()) { //если подзадач нет, то статус эпика NEW
@@ -403,17 +403,21 @@ public class InMemoryTaskManager implements TaskManager {
         } else {
             for (Integer s : epic.getSubtaskIds()) { //цикл по всем id подзадач данного эпика. посчитаем кол-во подзадач
                 Subtask subtask = subtasks.get(s); //берем из хешмапы подзадачу с нужным id
-                switch (subtask.getStatus()) { //в зависимости от статуса подзадачи, увеличиваем нужный счетчик
-                    case NEW:
-                        hasNewSubtasks = true; // взводим флаг наличия подзадач в состоянии NEW
-                        break;
-                    case IN_PROGRESS:
-                        hasInProgressSubtasks = true; // взводим флаг наличия подзадач в состоянии IN_PROGRESS
-                        break;
-                    case DONE:
-                        hasDoneSubtasks = true; // взводим флаг наличия подзадач в состоянии DONE
-                        break;
-                }//switch
+                if(subtask != null) { //если это не проверить, то при выгрузке данных
+                                        // из внешнего хоранилища могут возникнуть проблемы
+                                        //когда эпик со списком сабтасков уже создан, а сами сабтаски еще не все созданы
+                    switch (subtask.getStatus()) { //в зависимости от статуса подзадачи, увеличиваем нужный счетчик
+                        case NEW:
+                            hasNewSubtasks = true; // взводим флаг наличия подзадач в состоянии NEW
+                            break;
+                        case IN_PROGRESS:
+                            hasInProgressSubtasks = true; // взводим флаг наличия подзадач в состоянии IN_PROGRESS
+                            break;
+                        case DONE:
+                            hasDoneSubtasks = true; // взводим флаг наличия подзадач в состоянии DONE
+                            break;
+                    }//switch
+                }
             } //for
             if (!hasNewSubtasks && !hasInProgressSubtasks && hasDoneSubtasks) { //если все подзадачи завершены
                 epic.setStatus(Status.DONE);
@@ -437,14 +441,18 @@ public class InMemoryTaskManager implements TaskManager {
             LocalDateTime epicEndTime = LocalDateTime.MIN; //переменная для хранения времени окончания эпика
             for (var subtaskId : epic.getSubtaskIds()) { //проходим по всем сабтаскам данного эпика
                 Subtask subtask = subtasks.get(subtaskId); //берем сабтаск по id
-                if (subtask.getStartTime().isBefore(epicStartTime)) { //если у сабтаска начало раньше, чем текущий старт
-                    epicStartTime = subtask.getStartTime(); //запоминаем новый минимум (время начала)
+                if(subtask != null) { //если это не проверить, то при выгрузке данных
+                    // из внешнего хоранилища могут возникнуть проблемы
+                    //когда эпик со списком сабтасков уже создан, а сами сабтаски еще не все созданы
+                    if (subtask.getStartTime().isBefore(epicStartTime)) { //если у сабтаска начало раньше, чем текущий старт
+                        epicStartTime = subtask.getStartTime(); //запоминаем новый минимум (время начала)
+                    }
+                    if (subtask.getEndTime().isAfter(epicEndTime)) { //если у сабтаска время конца позже, чем текущий финиш
+                        epicEndTime = subtask.getEndTime(); //запоминаем новый минимум (время начала)
+                    }
+                    /*увеличиваем продолжительность эпика на продолжительность текушего сабтаска*/
+                    epic.setDuration(epic.getDuration() + subtask.getDuration());
                 }
-                if (subtask.getEndTime().isAfter(epicEndTime)) { //если у сабтаска время конца позже, чем текущий финиш
-                    epicEndTime = subtask.getEndTime(); //запоминаем новый минимум (время начала)
-                }
-                /*увеличиваем продолжительность эпика на продолжительность текушего сабтаска*/
-                epic.setDuration(epic.getDuration() + subtask.getDuration());
             }
             epic.setStartTime(epicStartTime); //перезаписываем время начала эпика
             epic.setEndTime(epicEndTime); //перезаписываем время конца эпика

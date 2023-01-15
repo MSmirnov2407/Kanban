@@ -25,11 +25,11 @@ public class HttpTaskServer {
     private TaskManager manager; //таск-менеджер, используемый для реализации маппинга HttpServera
     private static final int PORT = 8080; //порт, прослушиваемый нашим Http-сервером
     private HttpServer httpServer; //HTTP-сервер, который настраивается при создании объекта HttpTaskServer
-    private Gson gson; //gson-объект для работы с JSON-объектами
+    private Gson gson; //для работы с JSON
     private static final Charset DEFAULT_CHARSET = StandardCharsets.UTF_8; //переменная для хранения кодировки
 
 
-    public static void main(String[] args) throws IOException, InterruptedException {
+    public static void main(String args) throws IOException, InterruptedException {
         HttpTaskServer httpTaskServer = new HttpTaskServer();
         httpTaskServer.manager.createTask(new Task("task1", "description1"));
         sleep(10);
@@ -50,7 +50,7 @@ public class HttpTaskServer {
      */
     public HttpTaskServer() throws IOException {
         /*В качестве менеджера задач получаем менеджер, сохраняющий данные в файле.*/
-        manager = Managers.getFileBackedTaskManager(new File("src/fileHttp.csv"));
+        manager = Managers.getFileBackedTaskManager(new File("src/file1.csv"));
         /*создаем объект gson Для далььнейшего использования*/
         gson = new Gson();
         /*создаем HttpServer*/

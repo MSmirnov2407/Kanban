@@ -9,7 +9,7 @@ public final class Managers {
      * @return объект менеджера задач
      */
     public static TaskManager getDefault() {
-        return new InMemoryTaskManager();
+        return new HttpTaskManager("http://localhost:8078");
     }
 
     /**
