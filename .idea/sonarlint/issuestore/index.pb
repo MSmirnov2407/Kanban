@@ -21,18 +21,8 @@ H
 Test/EpicStatusTest.java,b\7\b7bbcbb45b64e49371a989fece6428b1584cd018
 N
 Test/HttpTasksManagerTest.java,e\3\e31fda12deb9f7dab2bfe4aa8507ef551ca36d34
-S
-#src/model/ManagerSaveException.java,2\5\251fe2e723eeb857424a1d1f9ad9492c7bffddfe
-M
-src/service/KVTaskClient.java,6\6\66c311488c6c5cd48c2021ad2429484d1f790360
-W
-'src/service/FileBackedTasksManager.java,1\b\1b151e580486b01c59584472ec4988c6f970858c
 T
 $src/service/InMemoryTaskManager.java,6\3\6367734ca952fbfc98c1e28d4c7bc72f134033e4
-O
-src/service/HttpTaskServer.java,2\6\26ef4daa128eea28e057d9403c475e74108b7a4f
-C
-src/model/Task.java,f\8\f832a384be168e161b98ea99b51d3c78b15a5a6b
 L
 Test/HttpTaskServerTest.java,7\f\7f18ea83b7004dc300a709a75916273d3c80f53c
 I
@@ -41,8 +31,18 @@ T
 $Test/FileBackedTasksManagerTest.java,d\5\d50d3f44b28189ab15454f444f3ee3200bfd4cf1
 I
 Test/TaskManagerTest.java,4\a\4a88c6d9b6515b13821cd874aab40ddf20b340a1
+M
+src/service/KVTaskClient.java,6\6\66c311488c6c5cd48c2021ad2429484d1f790360
+O
+src/service/HttpTaskServer.java,2\6\26ef4daa128eea28e057d9403c475e74108b7a4f
+C
+src/model/Task.java,f\8\f832a384be168e161b98ea99b51d3c78b15a5a6b
+S
+#src/model/ManagerSaveException.java,2\5\251fe2e723eeb857424a1d1f9ad9492c7bffddfe
 I
 src/service/KVServer.java,3\d\3d0d728b7a2307aae7abaff7e0f891ff877d5fb3
+W
+'src/service/FileBackedTasksManager.java,1\b\1b151e580486b01c59584472ec4988c6f970858c
 P
  src/service/HttpTaskManager.java,7\1\71790240f03bdce7e177a6831043d32df0806d3d
 =

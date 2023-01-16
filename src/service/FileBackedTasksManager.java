@@ -21,9 +21,17 @@ public class FileBackedTasksManager extends InMemoryTaskManager {
     }
 
     /**
+     * конструктор без параметров. Используется для того, чтобы потомки класса FileBackedTaskManager
+     * могли вызывать через super() конструктор родительского класса InMemoryTaskManager
+     */
+    protected FileBackedTasksManager() {
+        super();
+    }
+
+    /**
      * Сохранение всей информации из менеджера (таски,эпики, сабтаски, стория) в файл
      */
-    private void save() {
+    protected void save() {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file))) { //открыли буфер и поток чтения
             /*записываем строку с называниями полей*/
             bufferedWriter.write("id,type,name,status,description,startTime, duration, epic \n");

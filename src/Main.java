@@ -31,6 +31,5 @@ public class Main {
         HttpTaskManager manager2 = new HttpTaskManager("http://localhost:8078");
         manager2.loadFromServer();
         System.out.println("loaded history" + manager2.getHistory());
-
     }
 }

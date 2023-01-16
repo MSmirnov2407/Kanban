@@ -1,53 +1,59 @@
 
 š
-java:S1192¢"‚Define a constant instead of duplicating this literal "Ğ­Ğ¿Ğ¸ĞºĞ° Ñ Ğ·Ğ°Ğ¿Ñ€Ğ¾ÑˆĞµĞ½Ğ½Ñ‹Ğ¼ id Ğ½Ğµ ÑÑƒÑ‰ĞµÑÑ‚Ğ²ÑƒĞµÑ‚" 3 times.(•®’
+java:S1192ª"‚Define a constant instead of duplicating this literal "Ğ­Ğ¿Ğ¸ĞºĞ° Ñ Ğ·Ğ°Ğ¿Ñ€Ğ¾ÑˆĞµĞ½Ğ½Ñ‹Ğ¼ id Ğ½Ğµ ÑÑƒÑ‰ĞµÑÑ‚Ğ²ÑƒĞµÑ‚" 3 times.(•®’
 t
-java:S1192…"]Define a constant instead of duplicating this literal " ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ ÑƒĞ´Ğ°Ğ»Ñ‘Ğ½" 3 times.(«ë
+java:S1192‰"]Define a constant instead of duplicating this literal " ÑƒÑĞ¿ĞµÑˆĞ½Ğ¾ ÑƒĞ´Ğ°Ğ»Ñ‘Ğ½" 3 times.(«ë
 „
-java:S1192è"mDefine a constant instead of duplicating this literal "ĞŸĞ¾Ğ»ÑƒÑ‡ĞµĞ½ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹ JSON" 3 times.(¹ğà’
+java:S1192ì"mDefine a constant instead of duplicating this literal "ĞŸĞ¾Ğ»ÑƒÑ‡ĞµĞ½ Ğ½ĞµĞºĞ¾Ñ€Ñ€ĞµĞºÑ‚Ğ½Ñ‹Ğ¹ JSON" 3 times.(¹ğà’
 ^
-java:S1192Å"GDefine a constant instead of duplicating this literal "DELETE" 6 times.(áãÁ
+java:S1192Ğ"GDefine a constant instead of duplicating this literal "DELETE" 6 times.(áãÁ
 n
-java:S1192Ü"RDefine a constant instead of duplicating this literal " Ğ¾Ğ±Ğ½Ğ¾Ğ²Ğ»ĞµĞ½" 3 times.(è°…œşÿÿÿÿ
+java:S1192ß"RDefine a constant instead of duplicating this literal " Ğ¾Ğ±Ğ½Ğ¾Ğ²Ğ»ĞµĞ½" 3 times.(á„ÿ¥ùÿÿÿÿ
 _
-java:S1192Õ"HDefine a constant instead of duplicating this literal "subtask" 6 times.(í™‚Ë
+java:S1192à"HDefine a constant instead of duplicating this literal "subtask" 6 times.(í™‚Ë
+S
+java:S4973İ"<Strings and Boxed types should be compared using "equals()".(ß¿˜Ÿ
 X
-java:S4973Ú"<Strings and Boxed types should be compared using "equals()".(”©—áøÿÿÿÿ
+java:S4973Ò"<Strings and Boxed types should be compared using "equals()".(âîÔ±úÿÿÿÿ
 S
-java:S4973Ì"<Strings and Boxed types should be compared using "equals()".(æï
-S
-java:S4973¿"<Strings and Boxed types should be compared using "equals()".(½”¯¹
+java:S4973É"<Strings and Boxed types should be compared using "equals()".(ÅÖ¹Ø
 K
 java:S1191"5Use classes from the Java API instead of Sun classes.(üÕÙä
-M
-java:S1172 "+Remove this unused method parameter "args".(åà´Íûÿÿÿÿ8ÄØö—Û0
+F
+java:S1172 "+Remove this unused method parameter "args".(åà´Íûÿÿÿÿ
 M	java:S106B"9Replace this use of System.out or System.err by a logger.(Ô£Ë
 N	java:S106C"9Replace this use of System.out or System.err by a logger.(ÅÔ²ß
 S	java:S106K"9Replace this use of System.out or System.err by a logger.(—ı„±ùÿÿÿÿ
 O	java:S106š"9Replace this use of System.out or System.err by a logger.(ØÀ†İ
 T	java:S106ª"9Replace this use of System.out or System.err by a logger.(¯Áš×ûÿÿÿÿ
-T	java:S106µ"9Replace this use of System.out or System.err by a logger.(´ìß‘üÿÿÿÿ
-O	java:S106Ì"9Replace this use of System.out or System.err by a logger.(şÚÍ
-O	java:S106ò"9Replace this use of System.out or System.err by a logger.(ş‘è
-T	java:S106"9Replace this use of System.out or System.err by a logger.(ŒÎÖóüÿÿÿÿ
-T	java:S106š"9Replace this use of System.out or System.err by a logger.(Àò›€ıÿÿÿÿ
-N	java:S106¥"9Replace this use of System.out or System.err by a logger.(”£Øs
-O	java:S106½"9Replace this use of System.out or System.err by a logger.(×—Îª
-T	java:S106å"9Replace this use of System.out or System.err by a logger.(ë¶Û øÿÿÿÿ
-O	java:S106ƒ"9Replace this use of System.out or System.err by a logger.(Ã¸ÕØ
-T	java:S106"9Replace this use of System.out or System.err by a logger.(àæĞäşÿÿÿÿ
-T	java:S106™"9Replace this use of System.out or System.err by a logger.(×²Îèüÿÿÿÿ
-T	java:S106°"9Replace this use of System.out or System.err by a logger.(¸ÎåÛşÿÿÿÿ
-O	java:S106×"9Replace this use of System.out or System.err by a logger.(»§Œ¹
-O	java:S106ô"9Replace this use of System.out or System.err by a logger.(âÍíÏ
 2
-java:S3626†"Remove this redundant jump.(ûÁİ…
-O	java:S106€"9Replace this use of System.out or System.err by a logger.(·Ä¦·
-O	java:S106"9Replace this use of System.out or System.err by a logger.(áàòğ
-T	java:S106©"9Replace this use of System.out or System.err by a logger.(çæÊúÿÿÿÿ
+java:S3626º"Remove this redundant jump.(ûÁİ…
+T	java:S106µ"9Replace this use of System.out or System.err by a logger.(´ìß‘üÿÿÿÿ
+O	java:S106Í"9Replace this use of System.out or System.err by a logger.(şÚÍ
+O	java:S106ö"9Replace this use of System.out or System.err by a logger.(ş‘è
+T	java:S106“"9Replace this use of System.out or System.err by a logger.(ŒÎÖóüÿÿÿÿ
+T	java:S106"9Replace this use of System.out or System.err by a logger.(Àò›€ıÿÿÿÿ
+2
+java:S3626®"Remove this redundant jump.(ûÁİ…
+N	java:S106©"9Replace this use of System.out or System.err by a logger.(”£Øs
+O	java:S106Á"9Replace this use of System.out or System.err by a logger.(×—Îª
+T	java:S106ì"9Replace this use of System.out or System.err by a logger.(ë¶Û øÿÿÿÿ
+O	java:S106Š"9Replace this use of System.out or System.err by a logger.(Ã¸ÕØ
+T	java:S106•"9Replace this use of System.out or System.err by a logger.(àæĞäşÿÿÿÿ
+2
+java:S3626¥"Remove this redundant jump.(ûÁİ…
+T	java:S106 "9Replace this use of System.out or System.err by a logger.(×²Îèüÿÿÿÿ
+T	java:S106¸"9Replace this use of System.out or System.err by a logger.(¸ÎåÛşÿÿÿÿ
+O	java:S106â"9Replace this use of System.out or System.err by a logger.(»§Œ¹
+O	java:S106ÿ"9Replace this use of System.out or System.err by a logger.(âÍíÏ
+2
+java:S3626‘"Remove this redundant jump.(ûÁİ…
+O	java:S106‹"9Replace this use of System.out or System.err by a logger.(·Ä¦·
+O	java:S106©"9Replace this use of System.out or System.err by a logger.(áàòğ
+T	java:S106´"9Replace this use of System.out or System.err by a logger.(çæÊúÿÿÿÿ
 i
-java:S3776´"RRefactor this method to reduce its Cognitive Complexity from 56 to the 15 allowed.(éü•
+java:S3776¿"RRefactor this method to reduce its Cognitive Complexity from 56 to the 15 allowed.(éü•
 D
-java:S3398"(Move this method into "HttpTaskHandler".(ÔÄøÌùÿÿÿÿ
+java:S3398–"(Move this method into "HttpTaskHandler".(§å¡²şÿÿÿÿ
 D
-java:S3398‹"(Move this method into "HttpTaskHandler".(§å¡²şÿÿÿÿ
+java:S3398¨"(Move this method into "HttpTaskHandler".(ÔÄøÌùÿÿÿÿ

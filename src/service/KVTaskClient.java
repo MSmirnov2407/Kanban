@@ -8,9 +8,9 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 public class KVTaskClient {
-    HttpClient httpClient; //для взаимодействияс Http-сервером
-    String clientApiToken; //уникальный идентификатор клиента, получаемый от сервера при запросе /register
-    String storageUrl; //URL сервера-хранилища
+    private HttpClient httpClient; //для взаимодействияс Http-сервером
+    private String clientApiToken; //уникальный идентификатор клиента, получаемый от сервера при запросе /register
+    private String storageUrl; //URL сервера-хранилища
 
     public KVTaskClient(String storageUrl) throws IOException, InterruptedException {
         this.storageUrl = storageUrl; //сохраняем URL сервера-хранилища
@@ -46,10 +46,14 @@ public class KVTaskClient {
                 .build();
         /*отправляем запрос на сохранение*/
         HttpResponse<String> response = httpClient.send(saveRequest, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new IOException("KVTaskClient: неуспешное сохранение состояния менеджера на сервере-хранилище." +
+                    " Код ответа KVTaskServer: "+response.statusCode());
+        }
     }
 
     /**
-     * Возвращает состояние менеджера задач, хранящееся на сервере-хранилище под ключем key.
+     * Возвращает состояние менеджера задач, хранящееся на сервере-хранилище под ключом key.
      *
      * @param key - строковый ключ, по которому хранится состояние менеджера на сервере-хранилище
      * @return состояние менеджера задач в виде строки
@@ -64,6 +68,10 @@ public class KVTaskClient {
                 .build();
         /*отправляем запрос на сервер и возвращаем полученные данные*/
         HttpResponse<String> response = httpClient.send(loadRequest, HttpResponse.BodyHandlers.ofString());
+        if (response.statusCode() != 200) {
+            throw new IOException("KVTaskClient: неуспешная загрузка состояния менеджера с сервера-хранилища" +
+                    " Код ответа KVTaskServer: "+response.statusCode());
+        }
         return response.body();
     }
 }

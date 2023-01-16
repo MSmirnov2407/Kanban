@@ -186,13 +186,14 @@ public class HttpTaskServer {
                 return;
             } else {
                 taskId = taskIdOpt.get(); //преобразуем id из optional в int
-                if (manager.getTaskById(taskId) == null) { //сравниваем с null задачу, взятую по требуемому id
+                Task task = manager.getTaskById(taskId); //берем из менеджера задачу по полученному id
+                if (task == null) { //сравниваем с null задачу, взятую по требуемому id
                     writeResponse(exchange, "Задачи с запрошенным id не существует", 404);
                     return;
                 }
+                String jsonTask = gson.toJson(task); //запрашиваемый таск превращаем в json
+                writeResponse(exchange, jsonTask, 200); //возвращаем в ответ на запрос json-таск
             }
-            String jsonTask = gson.toJson(manager.getTaskById(taskId)); //запрашиваемый таск превращаем в json
-            writeResponse(exchange, jsonTask, 200); //возвращаем в ответ на запрос json-таск
         }
 
         /**
@@ -214,16 +215,19 @@ public class HttpTaskServer {
                     return;
                 }
                 //добавить или обновить таск
-                for (Task task : manager.getTasks()) { //пробегаем по таскам в поисках совпадения id
-                    if (task.getId() == taskFromBody.getId()) { //если запрашиваемый id найден, то обновняем таск
-                        manager.updateTask(taskFromBody);
-                        writeResponse(exchange, "Таск с id= " + taskFromBody.getId() + " обновлен", 200);
-                        return;
+                Integer taskFromBodyId = taskFromBody.getId(); //id из таска, полученного в теле ответа
+                if (taskFromBodyId != null) { //если у переданного таска нет id, то сразу переходим к созданию
+                    for (Task task : manager.getTasks()) { //пробегаем по таскам в поисках совпадения id
+                        if (task.getId() == taskFromBodyId) { //если запрашиваемый id найден, то обновняем таск
+                            manager.updateTask(taskFromBody);
+                            writeResponse(exchange, "Таск с id= " + taskFromBodyId + " обновлен", 200);
+                            return;
+                        }
                     }
                 }
                 manager.createTask(taskFromBody);
                 if (manager.getTasks().contains(taskFromBody)) {
-                    writeResponse(exchange, "Таск успешно добавлен. Id = " + taskFromBody.getId(), 201);
+                    writeResponse(exchange, "Таск успешно добавлен. Id = " + taskFromBodyId, 201);
                     return;
                 }
                 /*если таск по какой-то причине не добавился:*/
@@ -298,14 +302,14 @@ public class HttpTaskServer {
                 return;
             } else {
                 subtaskId = subtaskIdOpt.get(); //преобразуем id из optional в int
-                if (manager.getSubtaskById(subtaskId) == null) { //сравниваем с null подзадачу, взятую по требуемому id
+                Subtask subtask = manager.getSubtaskById(subtaskId); //берем из менеджера сабтаск по полученному id
+                if (subtask == null) { //сравниваем с null подзадачу, взятую по требуемому id
                     writeResponse(exchange, "Подзадачи с запрошенным id не существует", 404);
                     return;
                 }
+                String jsonSubtask = gson.toJson(subtask); //запрашиваемый сабтаск превращаем в json
+                writeResponse(exchange, jsonSubtask, 200); //возвращаем в ответ на запрос json-сабтаск
             }
-            String jsonSubtask = gson.toJson(manager.getSubtaskById(subtaskId)); //запрашиваемый сабтаск превращаем в json
-            writeResponse(exchange, jsonSubtask, 200); //возвращаем в ответ на запрос json-сабтаск
-
         }
 
         /**
@@ -328,16 +332,19 @@ public class HttpTaskServer {
                     return;
                 }
                 //добавить или обновить сабтаск
-                for (Subtask subtask : manager.getSubtasks()) { //пробегаем по сабтаскам в поисках совпадения id
-                    if (subtask.getId() == subtaskFromBody.getId()) { //если запрашиваемый id найден - обновняем сабтаск
-                        manager.updateSubtask(subtaskFromBody);
-                        writeResponse(exchange, "Сабтаск с id= " + subtaskFromBody.getId() + " обновлен", 200);
-                        return;
+                Integer subtaskFromBodyId = subtaskFromBody.getId();
+                if (subtaskFromBodyId != null) { //если у переданного сабтаска нет id, то сразу переходим к созданию
+                    for (Subtask subtask : manager.getSubtasks()) { //пробегаем по сабтаскам в поисках совпадения id
+                        if (subtask.getId() == subtaskFromBodyId) { //если запрашиваемый id найден - обновняем сабтаск
+                            manager.updateSubtask(subtaskFromBody);
+                            writeResponse(exchange, "Сабтаск с id= " + subtaskFromBodyId + " обновлен", 200);
+                            return;
+                        }
                     }
                 }
                 manager.createSubtask(subtaskFromBody);
                 if (manager.getSubtasks().contains(subtaskFromBody)) {
-                    writeResponse(exchange, "Сабтаск успешно добавлен. Id = " + subtaskFromBody.getId(), 201);
+                    writeResponse(exchange, "Сабтаск успешно добавлен. Id = " + subtaskFromBodyId, 201);
                     return;
                 }
                 /*если сабтаск по какой-то причине не добавился:*/
@@ -414,13 +421,14 @@ public class HttpTaskServer {
                 return;
             } else {
                 epicId = epicIdOpt.get(); //преобразуем id из optional в int
-                if (manager.getEpicById(epicId) == null) { //сравниваем с null эпик, взятый по требуемому id
+                Epic epic = manager.getEpicById(epicId); //берем из менеджера эпик по полученному id
+                if (epic == null) { //сравниваем с null эпик, взятый по требуемому id
                     writeResponse(exchange, "Эпика с запрошенным id не существует", 404);
                     return;
                 }
+                String jsonEpic = gson.toJson(epic); //запрашиваемый эпик превращаем в json
+                writeResponse(exchange, jsonEpic, 200); //возвращаем в ответ на запрос json-эпик
             }
-            String jsonEpic = gson.toJson(manager.getEpicById(epicId)); //запрашиваемый эпик превращаем в json
-            writeResponse(exchange, jsonEpic, 200); //возвращаем в ответ на запрос json-эпик
         }
 
         /**
@@ -443,16 +451,19 @@ public class HttpTaskServer {
                     return;
                 }
                 //добавить или обновить эпик
-                for (Epic epic : manager.getEpics()) { //пробегаем по эпикам в поисках совпадения id
-                    if (epic.getId() == epicFromBody.getId()) { //если запрашиваемый id найден, то обновняем эпик
-                        manager.updateEpic(epicFromBody);
-                        writeResponse(exchange, "Эпик с id= " + epicFromBody.getId() + " обновлен", 200);
-                        return;
+                Integer epicFromBodyId = epicFromBody.getId();
+                if (epicFromBodyId != null) { //если у переданного эпика нет id, то сразу переходим к созданию
+                    for (Epic epic : manager.getEpics()) { //пробегаем по эпикам в поисках совпадения id
+                        if (epic.getId() == epicFromBodyId) { //если запрашиваемый id найден, то обновняем эпик
+                            manager.updateEpic(epicFromBody);
+                            writeResponse(exchange, "Эпик с id= " + epicFromBodyId + " обновлен", 200);
+                            return;
+                        }
                     }
                 }
                 manager.createEpic(epicFromBody);
                 if (manager.getEpics().contains(epicFromBody)) {
-                    writeResponse(exchange, "Эпик успешно добавлен. Id = " + epicFromBody.getId(), 201);
+                    writeResponse(exchange, "Эпик успешно добавлен. Id = " + epicFromBodyId, 201);
                     return;
                 }
                 /*если эпик по какой-то причине не добавился:*/
@@ -527,7 +538,7 @@ public class HttpTaskServer {
                     writeResponse(exchange, "Эпика с запрошенным id не существует", 404);
                     return;
                 }
-                 //заворачиваем в json список id сабтасков запрашиваемого эпика
+                //заворачиваем в json список id сабтасков запрашиваемого эпика
                 String responseMessage = gson.toJson(epicOpt.get().getSubtaskIds());
                 writeResponse(exchange, responseMessage, 200); //возвращаем ответ на запрос
             }
@@ -658,7 +669,6 @@ public class HttpTaskServer {
                 os.write(bytes); //заполняем тело ответа байтами строки ответа
             }
         }
-        exchange.close(); //закрыли обмен
     }
 
     /**
