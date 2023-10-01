@@ -1,2 +1,3 @@
 # java-kanban
-Repository for homework project.
+
+### Таск-менеджер с сохранением информации в файле и на http-сервере.
